@@ -1,4 +1,0 @@
-- Use dialogue options
-    - Buttons
-- Open map button
-- Add localisation
