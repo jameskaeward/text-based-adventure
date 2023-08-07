@@ -107,6 +107,18 @@ class Map(customtkinter.CTkToplevel):
 
             #self.navbutton1 = customtkinter.CTkButton(self, text="1", command=master.game.player.move)
 
+class Settings(customtkinter.CTkToplevel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        self.title(loc("NAME_Settings"))
+        self.geometry("400x300")
+
+        self.language_select = customtkinter.CTkComboBox(self)
+
+    def change_language(self, language):
+        pass
+
 ## Main Frames
 
 class App(customtkinter.CTk):
