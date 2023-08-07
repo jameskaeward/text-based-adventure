@@ -6,6 +6,7 @@ l_english = {
     "NAME_Action_Bar": "Action Bar",
 
     # Menu Functions
+
     "NAME_Map": "Map",
     "DESC_Open_Map": "Open Map",
     "DESC_No_Player_Found": "Player doesn't exist!",
@@ -13,8 +14,14 @@ l_english = {
     "NAME_Main_Window": "Main Window",
 
     # Map Locations
+
     "DESC_Current_Location": "Current Location: ",
     "NAME_Entrance": "Entrance",
+
+    # Settings
+
+    "NAME_English": "English",
+    "NAME_French": "French",
 
     # Testing Localisation
 
@@ -43,6 +50,11 @@ l_french = {
     # Map Locations
     "DESC_Current_Location": "Localisation actuelle: ",
     "NAME_Entrance": "L'entrée",
+
+    # Settings
+
+    "NAME_English": "Anglais",
+    "NAME_French": "Français",
 
     # Testing Localisation
 

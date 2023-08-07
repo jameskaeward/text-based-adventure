@@ -114,10 +114,27 @@ class Settings(customtkinter.CTkToplevel):
         self.title(loc("NAME_Settings"))
         self.geometry("400x300")
 
-        self.language_select = customtkinter.CTkComboBox(self)
+        self.language_select = customtkinter.CTkComboBox(self, values = [loc("NAME_English"), loc("NAME_French")], command = self.change_language)
+        self.language_select.pack()
 
-    def change_language(self, language):
-        pass
+    def change_language(self, new_language):
+        print("Picked:", new_language)
+        
+#def combobox_callback(choice):
+#    print("combobox dropdown clicked:", choice)
+#
+#combobox_var = customtkinter.StringVar(value="option 2")
+#combobox = customtkinter.CTkComboBox(app, values=["option 1", "option 2"],
+#                                     command=combobox_callback, variable=combobox_var)
+#combobox_var.set("option 2")
+#
+#
+#def combobox_callback(choice):
+#    print("combobox dropdown clicked:", choice)
+#
+#combobox = customtkinter.CTkComboBox(app, values=["option 1", "option 2"],
+#                                     command=combobox_callback)
+#combobox.set("option 2")
 
 ## Main Frames
 
@@ -160,6 +177,7 @@ class App(customtkinter.CTk):
         self.sidebar.grid(row=0, column=0, padx=10)
 
         self.map = None
+        self.settings = None
 
         #self.test_button = customtkinter.CTkButton(master=self, width=10, text= "Test", command=self.actionbar.dialogue_option("Test", test_function))
         #self.test_button.grid(row=0, column=0)
@@ -169,8 +187,8 @@ class App(customtkinter.CTk):
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 2)
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 3)
 
-        #self.test_map = customtkinter.CTkButton(master=self, width=10, text="Test Map", command=self.open_map)
-        #self.test_map.grid(row=0, column=0)
+        #self.open_map = customtkinter.CTkButton(master=self, width=10, text="Test Map", command=self.open_map)
+        #self.open_map.grid(row=0, column=0)
         #self.test_game = customtkinter.CTkButton(master=self, width=10, text="Test Game", command=self.game.start_game)
         #self.test_game.grid(row=1, column=0)
 
@@ -179,6 +197,12 @@ class App(customtkinter.CTk):
             self.map = Map(self)  # create window if its None or destroyed
         else:
             self.map.focus()  # if window exists focus it
+
+    def open_settings(self):
+        if self.settings is None or not self.settings.winfo_exists():
+            self.settings = Settings(self)  # create window if its None or destroyed
+        else:
+            self.settings.focus()  # if window exists focus it
 
 
 class SideBar(customtkinter.CTkFrame):
@@ -190,10 +214,12 @@ class SideBar(customtkinter.CTkFrame):
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=font_bold)
         self.label.grid(row=0, column=0, padx=20)
 
-        self.test_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=master.open_map)
-        self.test_map.grid(row=1, column=0, pady=10)
+        self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=master.open_settings)
+        self.open_settings.grid(row=1, column=0, pady=10)
+        self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=master.open_map)
+        self.open_map.grid(row=2, column=0, pady=10)
         self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=master.game.start_game)
-        self.test_game.grid(row=2, column=0, pady=10)
+        self.test_game.grid(row=3, column=0, pady=10)
 
 
 class MainWindow(customtkinter.CTkFrame):
