@@ -1,5 +1,5 @@
 #import time
-#import tkinter
+import tkinter
 #from typing import Optional, Tuple, Union
 import customtkinter
 import localisation
@@ -115,12 +115,20 @@ class Settings(customtkinter.CTkToplevel):
         self.title(loc("NAME_Settings"))
         self.geometry("400x300")
 
-        self.language_select = customtkinter.CTkComboBox(self, values = [loc("NAME_English"), loc("NAME_French")], command = self.change_language)
+        #language_id = customtkinter.StringVar()
+
+        languages = list(localisation.l_index.keys())
+        #print(languages)
+        #self.language_select = customtkinter.CTkOptionMenu(self, values = [loc("NAME_English"), loc("NAME_French")], command = self.change_language, state="r")
+        self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language, state="r")
         self.language_select.pack()
+        
 
     def change_language(self, new_language):
+        language_id = localisation.l_index.get(new_language)
+        print(language_id)
         #print("Picked:", new_language)
-        config.change_setting(new_language)
+        #config.change_setting(new_language)
         
 #def combobox_callback(choice):
 #    print("combobox dropdown clicked:", choice)

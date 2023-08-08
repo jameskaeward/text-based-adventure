@@ -1,3 +1,10 @@
+l_index = {
+
+    "English": 'l_english',
+    "Français": 'l_french',
+
+}
+
 l_english = {
 
     # Title
@@ -67,6 +74,8 @@ l_french = {
 }
 
 if __name__ == "__main__":
-    #print("Run the Main File")
-    print(l_english)
-    print(l_french)
+    print("Run the Main File!")
+    #print(l_english)
+    #print(l_french)
+    #print(l_index.values())
+    print(l_index.keys())

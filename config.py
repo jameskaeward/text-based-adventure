@@ -2,22 +2,24 @@ import configparser
 import main
 import os.path
 
+config_setting = configparser.ConfigParser()
+
 # Create settings file if not already created
 
 if os.path.exists("./settings.ini") == None:
     print("No settings found")
 
     # Create settings file
-    settings_file = configparser.ConfigParser()
+    #config_setting = configparser.ConfigParser()
 
     # Set default settings
-    settings_file.add_section("Settings")
-    settings_file.set("Settings", "language", "l_english")
-    settings_file.set("Settings", "font_size", "20")
+    config_setting.add_section("Settings")
+    config_setting.set("Settings", "language", "l_english")
+    config_setting.set("Settings", "font_size", "20")
 
     # Save settings file
     with open(r"settings.ini", 'w') as setting:
-        settings_file.write(setting)
+        config_setting.write(setting)
         setting.flush()
         setting.close()
 
@@ -32,10 +34,21 @@ def change_setting(**setting):
     #read_settings.flush()
     #read_settings.close()
 
+    config_setting.add_section("Settings")
+
+    settings = open("settings.ini", "w")
+
     if "language" in setting:
         #print(setting["language"])
         main.language = setting["language"]
-        print(main.language)
+        #print(main.language)
+        config_setting.set("Settings", "language", setting["language"])
+    
+    # TODO This function overwrite old settings
+
+    config_setting.write(settings)
+    settings.flush()
+    settings.close()
 
 new_language = "l_english"
 change_setting(language = new_language)
