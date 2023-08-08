@@ -1,21 +1,21 @@
 import configparser
-#import main
+import main
 import os.path
 
 # Create settings file if not already created
 
 if os.path.exists("./settings.ini") == None:
     print("No settings found")
-    # CREATE OBJECT
+
+    # Create settings file
     settings_file = configparser.ConfigParser()
 
-    # ADD SECTION
+    # Set default settings
     settings_file.add_section("Settings")
-    # ADD SETTINGS TO SECTION
     settings_file.set("Settings", "language", "l_english")
     settings_file.set("Settings", "font_size", "20")
 
-    # SAVE SETTINGS FILE
+    # Save settings file
     with open(r"settings.ini", 'w') as setting:
         settings_file.write(setting)
         setting.flush()
@@ -23,29 +23,22 @@ if os.path.exists("./settings.ini") == None:
 
     print("Config file 'settings.ini' created")
 
-def change_setting(*var1, **var2):
+def change_setting(**setting):
 
-    # CREATE OBJECT
-    settings_file = configparser.ConfigParser()
+    #read_settings = open("settings.ini", "r")
+    #content = read_settings.read()
+    #print("Content of the config file are:\n")
+    #print(content)
+    #read_settings.flush()
+    #read_settings.close()
 
-    # ADD SECTION
-    settings_file.add_section("Settings")
-    # ADD SETTINGS TO SECTION
-    settings_file.set("Settings", "language", "l_english")
-    settings_file.set("Settings", "font_size", "20")
+    if "language" in setting:
+        #print(setting["language"])
+        main.language = setting["language"]
+        print(main.language)
 
-    # SAVE CONFIG FILE
-    with open(r"settings.ini", 'w') as setting:
-        settings_file.write(setting)
-        setting.flush()
-        setting.close()
-    
-    read_settings = open("settings.ini", "r")
-    content = read_settings.read()
-    print("Content of the config file are:\n")
-    print(content)
-    read_settings.flush()
-    read_settings.close()
+new_language = "l_english"
+change_setting(language = new_language)
 
 #if "pady" in scaled_kwargs:
 #if isinstance(scaled_kwargs["pady"], (int, float)):
