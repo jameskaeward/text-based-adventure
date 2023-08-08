@@ -3,6 +3,7 @@
 #from typing import Optional, Tuple, Union
 import customtkinter
 import localisation
+import config
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
@@ -118,7 +119,8 @@ class Settings(customtkinter.CTkToplevel):
         self.language_select.pack()
 
     def change_language(self, new_language):
-        print("Picked:", new_language)
+        #print("Picked:", new_language)
+        config.change_setting(new_language)
         
 #def combobox_callback(choice):
 #    print("combobox dropdown clicked:", choice)
