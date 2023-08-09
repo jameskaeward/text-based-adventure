@@ -34,21 +34,51 @@ def change_setting(**setting):
     #read_settings.flush()
     #read_settings.close()
 
-    config_setting.add_section("Settings")
+    config_setting.read("settings.ini")
 
-    settings = open("settings.ini", "w")
+    #settings = open("settings.ini", "w")
 
     if "language" in setting:
         #print(setting["language"])
         main.language = setting["language"]
         #print(main.language)
-        config_setting.set("Settings", "language", setting["language"])
+        #config_setting.set("Settings", "language", setting["language"])
+        config_setting["Settings"]["language"]=setting["language"]
+        config_setting["Settings"].update()
+
+        with open("configurations.ini","w") as file_object:
+            config_setting.write(file_object)
     
     # TODO This function overwrite old settings
 
-    config_setting.write(settings)
-    settings.flush()
-    settings.close()
+    #config_setting.write(settings)
+    #settings.flush()
+    #settings.close()
+
+#import configparser
+#
+# CREATE OBJECT
+#config_file = configparser.ConfigParser()
+#
+# READ CONFIG FILE
+#config_file.read("configurations.ini")
+# 
+# UPDATE A FIELD VALUE
+#config_file["Logger"]["LogLevel"]="Debug"
+# 
+# ADD A NEW FIELD UNDER A SECTION
+#config_file["Logger"].update({"Format":"(message)"})
+# 
+# SAVE THE SETTINGS TO THE FILE
+#with open("configurations.ini","w") as file_object:
+#    config_file.write(file_object)
+# 
+# DISPLAY UPDATED SAVED SETTINGS
+#print("Config file 'configurations.ini' is updated")
+#print("Updated file settings are:\n")
+#file=open("configurations.ini","r")
+#settings=file.read()
+#print(settings)
 
 new_language = "l_english"
 change_setting(language = new_language)
