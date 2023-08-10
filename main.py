@@ -1,6 +1,5 @@
 #import time
-import tkinter
-#from typing import Optional, Tuple, Union
+#import tkinter
 import customtkinter
 import localisation
 import config
@@ -70,7 +69,7 @@ class Game():
         if self.player is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            return loc(self.player.location)
+            return loc(gameworld.locations.get(self.player.location))
     
     def move_player(self, location_id):
 
@@ -84,10 +83,11 @@ class Player():
         self.state = True # Alive
         self.hp = 10
         self.mp = 10
-        self.location = "NAME_Entrance"
+        self.location = "location_Central"
     
-    def move(self):
-        print(loc("LOG_Moving_Player"))
+    def town_move(self, location):
+        print(loc("LOG_Moving_Player"), location)
+        self.location = location
 
 ###############
 ##### GUI #####
@@ -105,7 +105,7 @@ class Map(customtkinter.CTkToplevel):
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
 
         # Navigation Buttons
-        if master.game.player is None:
+        if app.game.player is None:
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
@@ -116,27 +116,31 @@ class Map(customtkinter.CTkToplevel):
 
         else:
 
-            player_location = loc("DESC_Current_Location") + master.game.locate_player()
+            player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
             self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            self.navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=master.game.player.move)
+            self.navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
             self.navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
+            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall"))
             self.navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
+            self.navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern"))
             self.navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Main_Shop"), command=master.game.player.move)
+            self.navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop"))
             self.navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=master.game.player.move)
+            self.navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
             self.navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
 
+    def map_move(self, new_location):
+        app.game.player.town_move(new_location)
+        self.destroy()
 
+test = customtkinter.CTkInputDialog()
 
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, master):
@@ -166,22 +170,6 @@ class Settings(customtkinter.CTkToplevel):
         if self.restart == None:
             self.restart = customtkinter.CTkLabel(self, text=loc("DESC_Apply_To_Restart"))
             self.restart.pack(pady=10)
-        
-#def combobox_callback(choice):
-#    print("combobox dropdown clicked:", choice)
-#
-#combobox_var = customtkinter.StringVar(value="option 2")
-#combobox = customtkinter.CTkComboBox(app, values=["option 1", "option 2"],
-#                                     command=combobox_callback, variable=combobox_var)
-#combobox_var.set("option 2")
-#
-#
-#def combobox_callback(choice):
-#    print("combobox dropdown clicked:", choice)
-#
-#combobox = customtkinter.CTkComboBox(app, values=["option 1", "option 2"],
-#                                     command=combobox_callback)
-#combobox.set("option 2")
 
 ## Main Frames
 
@@ -193,9 +181,6 @@ class App(customtkinter.CTk):
 
     def __init__(self):
         super().__init__()
-
-        #self.font_default = customtkinter.CTkFont(size=font_size+20, weight="normal")
-        #self.font_bold = customtkinter.CTkFont(size=font_size+20, weight="bold")
 
         # Setting font here as it gives an error when set outside
 
@@ -210,7 +195,6 @@ class App(customtkinter.CTk):
         self.geometry("1000x500")
         self.title(loc("NAME_Text_Based_Adventure"))
 
-        #self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -226,9 +210,6 @@ class App(customtkinter.CTk):
         self.map = None
         self.settings = None
 
-        #self.test_button = customtkinter.CTkButton(master=self, width=10, text= "Test", command=self.actionbar.dialogue_option("Test", test_function))
-        #self.test_button.grid(row=0, column=0)
-
         # TODO StringVar() buttons to change them
 
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
@@ -236,20 +217,15 @@ class App(customtkinter.CTk):
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 2)
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 3)
 
-        #self.open_map = customtkinter.CTkButton(master=self, width=10, text="Test Map", command=self.open_map)
-        #self.open_map.grid(row=0, column=0)
-        #self.test_game = customtkinter.CTkButton(master=self, width=10, text="Test Game", command=self.game.start_game)
-        #self.test_game.grid(row=1, column=0)
-
     def open_map(self):
         if self.map is None or not self.map.winfo_exists():
-            self.map = Map(self)  # create window if its None or destroyed
+            self.map = Map(self)  # Create window if its None or destroyed
         else:
             self.map.focus()  # if window exists focus it
 
     def open_settings(self):
         if self.settings is None or not self.settings.winfo_exists():
-            self.settings = Settings(self)  # create window if its None or destroyed
+            self.settings = Settings(self)  # Create window if its None or destroyed
         else:
             self.settings.focus()  # if window exists focus it
 
