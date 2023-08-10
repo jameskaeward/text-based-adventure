@@ -307,14 +307,14 @@ class ActionBar(customtkinter.CTkFrame):
         #self.button.grid(row=nrow, column=0, pady=10, sticky="EW")
         #self.button.configure(text=input_text, command=function)
         #update_button = eval(f"self.{button}")
-        update_button = self.local_variables[format(f"option_{button_row}")] # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
-        update_button.configure(text=input_text, command=function)
+        update_button = self.local_variables[f"option_{button_row}"]    # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
+        update_button.configure(text=input_text, command=function)      # format() is not needed: format(f"option_{button_row}")
         update_button.grid(row=button_row)
-        locals(self)[format(f"option_{button_row}")] = update_button # TODO Refer to previous TODO
+        locals(self)[f"option_{button_row}"] = update_button # TODO Refer to previous TODO
         update_button.grid_forget()
 
     def disable_option(self, button_row):
-        self.local_variables[format(f"option_{button_row}")].grid_forget()
+        self.local_variables[f"option_{button_row}"].grid_forget()
 
     ## Old Code for dynamic number of options ##
 
