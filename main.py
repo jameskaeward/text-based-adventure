@@ -140,8 +140,6 @@ class Map(customtkinter.CTkToplevel):
         app.game.player.town_move(new_location)
         self.destroy()
 
-test = customtkinter.CTkInputDialog()
-
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, master):
         super().__init__(master)
