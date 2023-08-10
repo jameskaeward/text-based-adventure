@@ -6,6 +6,7 @@ import config
 import configparser
 import gameworld
 
+# TODO: Add to settings menu
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
 
@@ -209,6 +210,7 @@ class App(customtkinter.CTk):
         self.settings = None
 
         # TODO StringVar() buttons to change them
+        # No longer needed: Use action_config to change text
 
         #def dialogue_option(self, master, input_text, function, button_row):
         #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
@@ -303,10 +305,8 @@ class ActionBar(customtkinter.CTkFrame):
         # TODO: Make sure to set .grid later 
 
     # Configures initialised buttons
-    def dialogue_option(self, button_row, input_text, function):
-        #self.button.grid(row=nrow, column=0, pady=10, sticky="EW")
-        #self.button.configure(text=input_text, command=function)
-        #update_button = eval(f"self.{button}")
+    # TODO: Use dictionary arguments **parameters
+    def action_config(self, button_row, input_text, function):
         update_button = self.local_variables[f"option_{button_row}"]    # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
         update_button.configure(text=input_text, command=function)      # format() is not needed: format(f"option_{button_row}")
         update_button.grid(row=button_row)
@@ -364,8 +364,7 @@ class ActionBar(customtkinter.CTkFrame):
 
 #https://felipetesc.github.io/CtkDocs/#/multiple_frames
 
-# Running Code
-
+## This runs the application ##
 if __name__ == "__main__":
     app = App()
     app.mainloop()
