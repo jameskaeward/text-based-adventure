@@ -5,6 +5,7 @@ import customtkinter
 import localisation
 import config
 import configparser
+import gameworld
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
@@ -14,8 +15,15 @@ def read_config():
     config_read.read('settings.ini')
     return config_read
 
-settings = read_config()
+if __name__ == "__main__":
+    global language
+    global font_size
+    global settings
+    settings = read_config()
+    language = str(settings["Settings"]["language"])
+    font_size = int(settings["Settings"]["font_size"])
 
+settings = read_config()
 language = str(settings["Settings"]["language"])
 font_size = int(settings["Settings"]["font_size"])
 
@@ -62,7 +70,7 @@ class Game():
         if self.player is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            return self.player.location
+            return loc(self.player.location)
     
     def move_player(self, location_id):
 
@@ -76,11 +84,10 @@ class Player():
         self.state = True # Alive
         self.hp = 10
         self.mp = 10
-        self.location = loc("NAME_Entrance")
+        self.location = "NAME_Entrance"
     
     def move(self):
         print(loc("LOG_Moving_Player"))
-
 
 ###############
 ##### GUI #####
@@ -94,7 +101,7 @@ class Map(customtkinter.CTkToplevel):
         
         self.title(loc("NAME_Map"))
         self.geometry("400x300")
-        self.rowconfigure((1, 2, 3, 4, 5), weight=1)
+        self.rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
 
         # Navigation Buttons
@@ -114,7 +121,15 @@ class Map(customtkinter.CTkToplevel):
             self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            #self.navbutton1 = customtkinter.CTkButton(self, text="1", command=master.game.player.move)
+            self.navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=master.game.player.move)
+            self.navbutton1.grid(row=6, column=3)
+
+            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
+            self.navbutton2.grid(row=2, column=3)
+
+            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
+            self.navbutton2.grid(row=2, column=3)
+
 
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, master):
@@ -126,16 +141,24 @@ class Settings(customtkinter.CTkToplevel):
         #language_id = customtkinter.StringVar()
 
         languages = list(localisation.l_index.keys())
-        #print(languages)
-        #self.language_select = customtkinter.CTkOptionMenu(self, values = [loc("NAME_English"), loc("NAME_French")], command = self.change_language, state="r")
-        self.label = customtkinter.CTkLabel(self, text = "NAME_Settings")
+        
+        self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=font_bold)
         self.label.pack(pady=10)
         self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language, state="r")
+        self.language_select.set(localisation.l_index_reverse.get(language))
         self.language_select.pack(pady=10)
+
+        self.restart = None
         
     def change_language(self, new_language):
         language_id = localisation.l_index.get(new_language)
         config.change_setting(language=language_id)
+        self.setting_changed()
+
+    def setting_changed(self):
+        if self.restart == None:
+            self.restart = customtkinter.CTkLabel(self, text=loc("DESC_Apply_To_Restart"))
+            self.restart.pack(pady=10)
         
 #def combobox_callback(choice):
 #    print("combobox dropdown clicked:", choice)
@@ -191,7 +214,7 @@ class App(customtkinter.CTk):
         self.mainwindow.grid(row=0, column=1, sticky="NESW")
 
         self.sidebar = SideBar(self)
-        self.sidebar.grid(row=0, column=0, padx=10)
+        self.sidebar.grid(row=0, rowspan=2, column=0, padx=10)
 
         self.map = None
         self.settings = None
@@ -226,7 +249,7 @@ class SideBar(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
 
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(5, weight=1)
 
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=font_bold)
         self.label.grid(row=0, column=0, padx=20)

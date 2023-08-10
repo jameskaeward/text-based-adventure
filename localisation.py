@@ -5,6 +5,13 @@ l_index = {
 
 }
 
+l_index_reverse = {
+
+    'l_english': "English",
+    "l_french": 'Français',
+
+}
+
 l_english = {
 
     # Title
@@ -12,10 +19,14 @@ l_english = {
     "NAME_Text_Based_Adventure": "Text Based Adventure",
     "NAME_Action_Bar": "Action Bar",
 
-    # Menu Functions
+    # Menus
 
     "NAME_Map": "Map",
     "DESC_Open_Map": "Open Map",
+
+    "DESC_Open_Settings": "Open Settings",
+    "NAME_Settings": "Settings",
+
     "DESC_No_Player_Found": "Player doesn't exist!",
     "NAME_Menu": "Menu",
     "NAME_Main_Window": "Main Window",
@@ -29,6 +40,8 @@ l_english = {
 
     "NAME_English": "English",
     "NAME_French": "French",
+
+    "DESC_Apply_To_Restart": "Restart application to apply settings.",
 
     # Testing Localisation
 
@@ -47,9 +60,13 @@ l_french = {
     "NAME_Text_Based_Adventure": "Aventure textuelle",
     "NAME_Action_Bar": "Barre d'action",
 
-    # Menu Functions
+    # Menu
     "NAME_Map": "Carte",
     "DESC_Open_Map": "Ouvrir la carte",
+
+    "DESC_Open_Settings": "Ouvrir les paramètres",
+    "NAME_Settings": "Paramètres",
+
     "DESC_No_Player_Found": "Le joueur n'existe pas",
     "NAME_Menu": "Menu",
     "NAME_Main_Window": "Fenêtre Principale",
@@ -62,6 +79,8 @@ l_french = {
 
     "NAME_English": "Anglais",
     "NAME_French": "Français",
+
+    "DESC_Apply_To_Restart": "Redémarrez l'application pour appliquer les paramètres.",
 
     # Testing Localisation
 
