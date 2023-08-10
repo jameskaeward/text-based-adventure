@@ -22,10 +22,6 @@ if __name__ == "__main__":
     language = str(settings["Settings"]["language"])
     font_size = int(settings["Settings"]["font_size"])
 
-settings = read_config()
-language = str(settings["Settings"]["language"])
-font_size = int(settings["Settings"]["font_size"])
-
 def test_function():
     print(loc("TEST_Hello_World"))
 
@@ -88,6 +84,10 @@ class Player():
     def town_move(self, location):
         print(loc("LOG_Moving_Player"), location)
         self.location = location
+
+    def enter_dungeon(self):
+        print(loc("LOG_Entering_Dungeon"))
+        self.location = "location_Dungeon"
 
 ###############
 ##### GUI #####

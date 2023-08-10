@@ -1,5 +1,5 @@
 import configparser
-import main
+#import main
 import os.path
 
 config = configparser.ConfigParser()
@@ -32,7 +32,7 @@ def change_setting(**setting):
     # Checks for which setting to change then changes it
 
     if "language" in setting:
-        main.language = setting["language"]
+        #main.language = setting["language"]
         config["Settings"]["language"]=setting["language"]
         config["Settings"].update()
 
@@ -41,7 +41,7 @@ def change_setting(**setting):
 
 
     if "font_size" in setting:
-        main.font_size = setting["font_size"]
+        #main.font_size = setting["font_size"]
         config["Settings"]["font_size"]=setting["font_size"]
         config["Settings"].update()
 

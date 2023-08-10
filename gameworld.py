@@ -8,4 +8,6 @@ locations = {
     "location_Central": "NAME_Central",
     "location_Tavern": "NAME_Tavern",
 
+    "location_Dungeon": "NAME_Dungeon",
+
 }
