@@ -210,10 +210,11 @@ class App(customtkinter.CTk):
 
         # TODO StringVar() buttons to change them
 
-        self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
-        self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 1)
-        self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 2)
-        self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 3)
+        #def dialogue_option(self, master, input_text, function, button_row):
+        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
+        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 1)
+        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 2)
+        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 3)
 
     def open_map(self):
         if self.map is None or not self.map.winfo_exists():
@@ -266,18 +267,67 @@ class ActionBar(customtkinter.CTkFrame):
         self.options = customtkinter.CTkFrame(master=self)
         self.options.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky="W")
 
-        #num_dialogue_options = 0
+        # Options Pre-Initialise
 
-    def dialogue_option(self, input_text, function, nrow):
+        option_1 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        option_1.grid(row=1, column=0, pady=10, sticky="EW") # This will be done by function
+        option_1.button = customtkinter.CTkButton(master=option_1, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(1))
+        option_1.button.grid(row=0, column=0, padx=10)
+        option_1.label = customtkinter.CTkLabel(master=option_1, width=10, text=loc("DESC_Placeholder_Text"))
+        option_1.label.grid(row=0, column=1, padx=10)
 
-        rows = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        #rows = tkinter.Frame(master=self.options)
-        rows.grid(row=nrow, column=0, pady=10, sticky="EW")
+        option_2 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        option_2.grid(row=2, column=0, pady=10, sticky="EW") # This will be done by function
+        option_2.button = customtkinter.CTkButton(master=option_2, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(2))
+        option_2.button.grid(row=0, column=0, padx=10)
+        option_2.label = customtkinter.CTkLabel(master=option_2, width=10, text=loc("DESC_Placeholder_Text"))
+        option_2.label.grid(row=0, column=1, padx=10)
 
-        options = customtkinter.CTkButton(master=rows, width=10, text=input_text, command=function)
-        options.grid(row=nrow, column=0, padx=10)
-        label = customtkinter.CTkLabel(master=rows, width=10, text=input_text)
-        label.grid(row=nrow, column=1, padx=10)
+        option_3 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        option_3.grid(row=3, column=0, pady=10, sticky="EW") # This will be done by function
+        option_3.button = customtkinter.CTkButton(master=option_3, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(3))
+        option_3.button.grid(row=0, column=0, padx=10)
+        option_3.label = customtkinter.CTkLabel(master=option_3, width=10, text=loc("DESC_Placeholder_Text"))
+        option_3.label.grid(row=0, column=1, padx=10)
+
+        option_4 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        option_4.grid(row=4, column=0, pady=10, sticky="EW") # This will be done by function
+        option_4.button = customtkinter.CTkButton(master=option_4, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(4))
+        option_4.button.grid(row=0, column=0, padx=10)
+        option_4.label = customtkinter.CTkLabel(master=option_4, width=10, text=loc("DESC_Placeholder_Text"))
+        option_4.label.grid(row=0, column=1, padx=10)
+
+        self.local_variables = locals()
+        #print(self.local_variables)
+
+        # TODO: Make sure to set .grid later 
+
+    # Configures initialised buttons
+    def dialogue_option(self, button_row, input_text, function):
+        #self.button.grid(row=nrow, column=0, pady=10, sticky="EW")
+        #self.button.configure(text=input_text, command=function)
+        #update_button = eval(f"self.{button}")
+        update_button = self.local_variables[format(f"option_{button_row}")] # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
+        update_button.configure(text=input_text, command=function)
+        update_button.grid(row=button_row)
+        locals(self)[format(f"option_{button_row}")] = update_button # TODO Refer to previous TODO
+        update_button.grid_forget()
+
+    def disable_option(self, button_row):
+        self.local_variables[format(f"option_{button_row}")].grid_forget()
+
+    ## Old Code for dynamic number of options ##
+
+    #def dialogue_option(self, input_text, function, nrow):
+    #
+    #    rows = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+    #    #rows = tkinter.Frame(master=self.options)
+    #    rows.grid(row=nrow, column=0, pady=10, sticky="EW")
+    #
+    #    options = customtkinter.CTkButton(master=rows, width=10, text=input_text, command=function)
+    #    options.grid(row=nrow, column=0, padx=10)
+    #    label = customtkinter.CTkLabel(master=rows, width=10, text=input_text)
+    #    label.grid(row=nrow, column=1, padx=10)
 
     # Example of getting dynamic buttons
     #def get(self):
