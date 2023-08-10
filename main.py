@@ -122,13 +122,20 @@ class Map(customtkinter.CTkToplevel):
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             self.navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=master.game.player.move)
-            self.navbutton1.grid(row=6, column=3)
+            self.navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
 
             self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
-            self.navbutton2.grid(row=2, column=3)
+            self.navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
-            self.navbutton2.grid(row=2, column=3)
+            self.navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=master.game.player.move)
+            self.navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
+
+            self.navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Main_Shop"), command=master.game.player.move)
+            self.navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
+
+            self.navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=master.game.player.move)
+            self.navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
+
 
 
 class Settings(customtkinter.CTkToplevel):
@@ -221,6 +228,8 @@ class App(customtkinter.CTk):
 
         #self.test_button = customtkinter.CTkButton(master=self, width=10, text= "Test", command=self.actionbar.dialogue_option("Test", test_function))
         #self.test_button.grid(row=0, column=0)
+
+        # TODO StringVar() buttons to change them
 
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
         self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 1)
