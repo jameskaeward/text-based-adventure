@@ -2,7 +2,7 @@ import configparser
 import main
 import os.path
 
-config_setting = configparser.ConfigParser()
+config = configparser.ConfigParser()
 
 # Create settings file if not already created
 
@@ -10,16 +10,16 @@ if os.path.exists("./settings.ini") == None:
     print("No settings found")
 
     # Create settings file
-    #config_setting = configparser.ConfigParser()
+    #config = configparser.ConfigParser()
 
     # Set default settings
-    config_setting.add_section("Settings")
-    config_setting.set("Settings", "language", "l_english")
-    config_setting.set("Settings", "font_size", "20")
+    config.add_section("Settings")
+    config.set("Settings", "language", "l_english")
+    config.set("Settings", "font_size", "20")
 
     # Save settings file
     with open(r"settings.ini", 'w') as setting:
-        config_setting.write(setting)
+        config.write(setting)
         setting.flush()
         setting.close()
 
@@ -34,7 +34,7 @@ def change_setting(**setting):
     #read_settings.flush()
     #read_settings.close()
 
-    config_setting.read("settings.ini")
+    config.read("settings.ini")
 
     #settings = open("settings.ini", "w")
 
@@ -42,16 +42,22 @@ def change_setting(**setting):
         #print(setting["language"])
         main.language = setting["language"]
         #print(main.language)
-        #config_setting.set("Settings", "language", setting["language"])
-        config_setting["Settings"]["language"]=setting["language"]
-        config_setting["Settings"].update()
+        #config.set("Settings", "language", setting["language"])
+        config["Settings"]["language"]=setting["language"]
+        config["Settings"].update()
 
         with open("configurations.ini","w") as file_object:
-            config_setting.write(file_object)
-    
-    # TODO This function overwrite old settings
+            config.write(file_object)
 
-    #config_setting.write(settings)
+    if "font_size" in setting:
+        main.font_size = setting["font_size"]
+        config["Settings"]["font_size"]=setting["font_size"]
+        config["Settings"].update()
+
+        with open("configurations.ini","w") as file_object:
+            config.write(file_object)
+
+    #config.write(settings)
     #settings.flush()
     #settings.close()
 
@@ -80,8 +86,8 @@ def change_setting(**setting):
 #settings=file.read()
 #print(settings)
 
-new_language = "l_english"
-change_setting(language = new_language)
+#new_language = "l_english"
+#change_setting(language = new_language)
 
 #if "pady" in scaled_kwargs:
 #if isinstance(scaled_kwargs["pady"], (int, float)):

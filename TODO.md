@@ -1,4 +1,4 @@
-# TO DO
+# TODO
 
 - [x] Use dialogue options
 -   [x] Buttons
@@ -10,3 +10,4 @@
 - [ ] Merchant encounter for loop
 - [ ] Loop for dialogue interaction (Printing text)
 - [ ] Make a launcher
+- [ ] Random Rooms

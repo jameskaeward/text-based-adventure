@@ -4,12 +4,20 @@ import tkinter
 import customtkinter
 import localisation
 import config
+import configparser
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
 
-font_size = 20
-language = "l_english"
+def read_config():
+    config_read = configparser.ConfigParser()
+    config_read.read('settings.ini')
+    return config_read
+
+settings = read_config()
+
+language = str(settings["Settings"]["language"])
+font_size = int(settings["Settings"]["font_size"])
 
 def test_function():
     print(loc("TEST_Hello_World"))
@@ -120,15 +128,14 @@ class Settings(customtkinter.CTkToplevel):
         languages = list(localisation.l_index.keys())
         #print(languages)
         #self.language_select = customtkinter.CTkOptionMenu(self, values = [loc("NAME_English"), loc("NAME_French")], command = self.change_language, state="r")
+        self.label = customtkinter.CTkLabel(self, text = "NAME_Settings")
+        self.label.pack(pady=10)
         self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language, state="r")
-        self.language_select.pack()
+        self.language_select.pack(pady=10)
         
-
     def change_language(self, new_language):
         language_id = localisation.l_index.get(new_language)
-        print(language_id)
-        #print("Picked:", new_language)
-        #config.change_setting(new_language)
+        config.change_setting(language=language_id)
         
 #def combobox_callback(choice):
 #    print("combobox dropdown clicked:", choice)
