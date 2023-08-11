@@ -5,7 +5,7 @@ import customtkinter
 import localisation
 import config
 import configparser
-import gameworld
+import gameworld as world
 
 # TODO: Add to settings menu
 customtkinter.set_appearance_mode("system")
@@ -18,11 +18,11 @@ def read_config():
 
 if __name__ == "__main__":
     global language
-    global font_size
+    global _font_size
     global settings
     settings = read_config()
     language = str(settings["Settings"]["language"])
-    font_size = int(settings["Settings"]["font_size"])
+    _font_size = int(settings["Settings"]["font_size"])
 
 def placeholder_function():
     print(loc("TEST_Hello_World"))
@@ -67,7 +67,7 @@ class Game():
         if self.player is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            return loc(gameworld.locations.get(self.player.location))
+            return loc(world.locations.get(self.player.location))
     
     def move_player(self, location_id):
 
@@ -102,41 +102,68 @@ class Map(customtkinter.CTkToplevel):
         super().__init__(master)
         
         self.title(loc("NAME_Map"))
-        self.geometry("400x300")
+        self.geometry("700x300")
         self.rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
 
         # Navigation Buttons
-        if app.game.player is None:
+        if app.game.player is None: # User should not see this
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
             self.warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=font_default)
             self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
-            #print("Player doesn't exist!")
+            # print("Player doesn't exist!")
+            return
 
-        else:
+        if app.game.player.location in world.town: # If player is in town
+
+            # print("Player is in town")
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
             self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            self.navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
-            self.navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
+            navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
+            navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall"))
-            self.navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
+            navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall"))
+            navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern"))
-            self.navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
+            navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern"))
+            navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop"))
-            self.navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
+            navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop"))
+            navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
 
-            self.navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
-            self.navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
+            navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
+            navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
+
+        else: # If player is in the dungeon
+
+            # print("Player in dungeon")
+
+            player_location = loc("DESC_Current_Location") + app.game.locate_player()
+
+            self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
+            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+
+            # navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
+            # navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
+
+            # navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall"))
+            # navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
+
+            # navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern"))
+            # navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
+
+            # navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop"))
+            # navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
+
+            # navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
+            # navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
 
     def map_move(self, new_location):
         app.game.player.town_move(new_location)
@@ -152,18 +179,33 @@ class Settings(customtkinter.CTkToplevel):
         #language_id = customtkinter.StringVar()
 
         languages = list(localisation.l_index.keys())
+
+        font_sizes = ["15", "20", "25", "30"]
         
         self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=font_bold)
         self.label.pack(pady=10)
-        self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language, state="r")
+
+        self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=font_default)
+        self.language_select_label.pack(pady=10)
+        self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language)
         self.language_select.set(localisation.l_index_reverse.get(language))
         self.language_select.pack(pady=10)
+
+        self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=font_default)
+        self.font_select_label.pack(pady=10)
+        self.font_select = customtkinter.CTkOptionMenu(self, values = font_sizes, command = self.change_font_size)
+        self.font_select.set(_font_size)
+        self.font_select.pack(pady=10)
 
         self.restart = None
         
     def change_language(self, new_language):
         language_id = localisation.l_index.get(new_language)
         config.change_setting(language=language_id)
+        self.setting_changed()
+
+    def change_font_size(self, new_font_size):
+        config.change_setting(font_size=new_font_size)
         self.setting_changed()
 
     def setting_changed(self):
@@ -187,8 +229,8 @@ class App(customtkinter.CTk):
         global font_default
         global font_bold
 
-        font_default = customtkinter.CTkFont(size=font_size, weight="normal")
-        font_bold = customtkinter.CTkFont(size=font_size, weight="bold")
+        font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
+        font_bold = customtkinter.CTkFont(size=_font_size*2, weight="bold")
 
         self.game = Game()
 
@@ -272,7 +314,7 @@ class ActionBar(customtkinter.CTkFrame):
 
         # Options Pre-Initialise
 
-        for x in range(1, 4):
+        for x in range(1, 6):
             locals()[f"option_{x}"] = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
             locals()[f"option_{x}"].button = customtkinter.CTkButton(master=locals()[f"option_{x}"], width=10)
             locals()[f"option_{x}"].label = customtkinter.CTkLabel(master=locals()[f"option_{x}"], width=10)
@@ -294,7 +336,7 @@ class ActionBar(customtkinter.CTkFrame):
         # option_4.label = customtkinter.CTkLabel(master=option_4, width=10)
 
         self.local_variables = locals()
-        #print(self.local_variables)
+        # print(self.local_variables)
 
         # TODO: Make sure to set .grid later 
 
@@ -374,7 +416,7 @@ class ActionBar(customtkinter.CTkFrame):
 
 
 #test = ActionBarOptions.dialogue_option(app.actionbar.options, "Hello World")
-#print("Hello World")
+# print("Hello World")
 
 #https://felipetesc.github.io/CtkDocs/#/multiple_frames
 

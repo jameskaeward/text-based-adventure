@@ -41,6 +41,9 @@ l_english = {
     "NAME_English": "English",
     "NAME_French": "French",
 
+    "NAME_Languages": "Language",
+    "NAME_Font_Size": "Font Size",
+
     "DESC_Apply_To_Restart": "Restart application to apply settings.",
 
     # Testing Localisation

@@ -11,3 +11,22 @@ locations = {
     "location_Dungeon": "NAME_Dungeon",
 
 }
+
+town = [
+
+    "location_Entrance", 
+    "location_Main_Hall", 
+    "location_Shop", 
+    "location_Central", 
+    "location_Tavern",
+
+]
+
+dungeon = [
+
+    "location_dungeon_room_1", # TODO: Add comments here for room description
+    "location_dungeon_room_2",
+    "location_dungeon_room_3",
+    "location_dungeon_room_4",
+
+]
