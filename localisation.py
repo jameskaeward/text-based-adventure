@@ -97,7 +97,7 @@ l_french = {
 
 if __name__ == "__main__":
     print("Run the Main File!")
-    #print(l_english)
-    #print(l_french)
-    #print(l_index.values())
-    #print(l_index.keys())
+    # print(l_english)
+    # print(l_french)
+    # print(l_index.values())
+    # print(l_index.keys())

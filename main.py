@@ -1,5 +1,5 @@
-#import time
-#import tkinter
+# import time
+# import tkinter
 from typing import Union, Callable
 import customtkinter
 import localisation
@@ -40,7 +40,7 @@ def loc(loc_id):
     if text == None:
         text = loc_id
 
-    #text = "Max is a Noob"
+    # text = "Max is a Noob"
 
     return text
 
@@ -176,7 +176,8 @@ class Settings(customtkinter.CTkToplevel):
         self.title(loc("NAME_Settings"))
         self.geometry("400x300")
 
-        #language_id = customtkinter.StringVar()
+        # language_id = customtkinter.StringVar()
+        # No need: Use .configure() to change text
 
         languages = list(localisation.l_index.keys())
 
@@ -217,9 +218,9 @@ class Settings(customtkinter.CTkToplevel):
 
 class App(customtkinter.CTk):
 
-    #frames = {}
-    #current = None
-    #bg = ""
+    # frames = {}
+    # current = None
+    # bg = ""
 
     def __init__(self):
         super().__init__()
@@ -342,7 +343,7 @@ class ActionBar(customtkinter.CTkFrame):
 
     # Configures initialised buttons
     # TODO: Use dictionary arguments **parameters
-    #def action_config(self, button_row, input_text, function):
+    # def action_config(self, button_row, input_text, function):
     #    update_button = self.local_variables[f"option_{button_row}"]    # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
     #    update_button.configure(text=input_text, command=function)      # format() is not needed: format(f"option_{button_row}")
     #    update_button.grid(row=button_row)
@@ -356,9 +357,9 @@ class ActionBar(customtkinter.CTkFrame):
                       command: Union[Callable[[], None], None] = lambda: placeholder_function()):
         
         # Old Code
-        #if "text" in parameters: #TODO Change to button reference
+        # if "text" in parameters: #TODO Change to button reference
         #    self.local_variables[f"option_{button_row}"].configure(text=parameters["text"])
-        #if "command" in parameters:
+        # if "command" in parameters:
         #    self.local_variables[f"option_{button_row}"].configure(command=lambda: parameters["command"])
 
 
@@ -372,9 +373,9 @@ class ActionBar(customtkinter.CTkFrame):
     def disable_option(self, button_row):
         self.local_variables[f"option_{button_row}"].grid_forget()
 
-    ## Old Code for dynamic number of options ##
-
-    #def dialogue_option(self, input_text, function, nrow):
+    # # Old Code for dynamic number of options #
+    #
+    # def dialogue_option(self, input_text, function, nrow):
     #
     #    rows = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
     #    #rows = tkinter.Frame(master=self.options)
@@ -384,23 +385,23 @@ class ActionBar(customtkinter.CTkFrame):
     #    options.grid(row=nrow, column=0, padx=10)
     #    label = customtkinter.CTkLabel(master=rows, width=10, text=input_text)
     #    label.grid(row=nrow, column=1, padx=10)
-
+    #
     # Example of getting dynamic buttons
-    #def get(self):
+    # def get(self):
     #    checked_checkboxes = []
     #    for checkbox in self.checkboxes:
     #        if checkbox.get() == 1:
     #            checked_checkboxes.append(checkbox.cget("text"))
     #    return checked_checkboxes
     #
-    #def reset_dialogue(self):
-    #  
+    # def reset_dialogue(self):
+    #
     #    for rows in self.options:
     #        #rows.destroy()
     #        rows.grid.forget()
 
 
-#class ActionBarOptions(customtkinter.CTkFrame):
+# class ActionBarOptions(customtkinter.CTkFrame):
 #    def __init__(self, master):
 #        super().__init__(master)
 #        options = 0
@@ -415,10 +416,10 @@ class ActionBar(customtkinter.CTkFrame):
 
 
 
-#test = ActionBarOptions.dialogue_option(app.actionbar.options, "Hello World")
+# test = ActionBarOptions.dialogue_option(app.actionbar.options, "Hello World")
 # print("Hello World")
 
-#https://felipetesc.github.io/CtkDocs/#/multiple_frames
+# https://felipetesc.github.io/CtkDocs/#/multiple_frames
 
 ## This runs the application ##
 if __name__ == "__main__":
