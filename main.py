@@ -1,5 +1,6 @@
 #import time
 #import tkinter
+from typing import Union, Callable
 import customtkinter
 import localisation
 import config
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     language = str(settings["Settings"]["language"])
     font_size = int(settings["Settings"]["font_size"])
 
-def test_function():
+def placeholder_function():
     print(loc("TEST_Hello_World"))
 
 ######################
@@ -209,14 +210,13 @@ class App(customtkinter.CTk):
         self.map = None
         self.settings = None
 
-        # TODO StringVar() buttons to change them
-        # No longer needed: Use action_config to change text
+        # Initial Button Configuration
+        # TODO: Move check for location, then change
 
-        #def dialogue_option(self, master, input_text, function, button_row):
-        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 0)
-        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 1)
-        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 2)
-        #self.actionbar.dialogue_option(loc("NAME_Test"), test_function, 3)
+        self.actionbar.action_config(1)
+        self.actionbar.action_config(2)
+        self.actionbar.action_config(3)
+        self.actionbar.action_config(4)
 
     def open_map(self):
         if self.map is None or not self.map.winfo_exists():
@@ -272,32 +272,20 @@ class ActionBar(customtkinter.CTkFrame):
         # Options Pre-Initialise
 
         option_1 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_1.grid(row=1, column=0, pady=10, sticky="EW") # This will be done by function
-        option_1.button = customtkinter.CTkButton(master=option_1, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(1))
-        option_1.button.grid(row=0, column=0, padx=10)
-        option_1.label = customtkinter.CTkLabel(master=option_1, width=10, text=loc("DESC_Placeholder_Text"))
-        option_1.label.grid(row=0, column=1, padx=10)
+        option_1.button = customtkinter.CTkButton(master=option_1, width=10)
+        option_1.label = customtkinter.CTkLabel(master=option_1, width=10)
 
         option_2 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_2.grid(row=2, column=0, pady=10, sticky="EW") # This will be done by function
-        option_2.button = customtkinter.CTkButton(master=option_2, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(2))
-        option_2.button.grid(row=0, column=0, padx=10)
-        option_2.label = customtkinter.CTkLabel(master=option_2, width=10, text=loc("DESC_Placeholder_Text"))
-        option_2.label.grid(row=0, column=1, padx=10)
+        option_2.button = customtkinter.CTkButton(master=option_2, width=10)
+        option_2.label = customtkinter.CTkLabel(master=option_2, width=10)
 
         option_3 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_3.grid(row=3, column=0, pady=10, sticky="EW") # This will be done by function
-        option_3.button = customtkinter.CTkButton(master=option_3, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(3))
-        option_3.button.grid(row=0, column=0, padx=10)
-        option_3.label = customtkinter.CTkLabel(master=option_3, width=10, text=loc("DESC_Placeholder_Text"))
-        option_3.label.grid(row=0, column=1, padx=10)
+        option_3.button = customtkinter.CTkButton(master=option_3, width=10)
+        option_3.label = customtkinter.CTkLabel(master=option_3, width=10)
 
         option_4 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_4.grid(row=4, column=0, pady=10, sticky="EW") # This will be done by function
-        option_4.button = customtkinter.CTkButton(master=option_4, width=10, text=loc("DESC_Placeholder_Text"), command=lambda: self.disable_option(4))
-        option_4.button.grid(row=0, column=0, padx=10)
-        option_4.label = customtkinter.CTkLabel(master=option_4, width=10, text=loc("DESC_Placeholder_Text"))
-        option_4.label.grid(row=0, column=1, padx=10)
+        option_4.button = customtkinter.CTkButton(master=option_4, width=10)
+        option_4.label = customtkinter.CTkLabel(master=option_4, width=10)
 
         self.local_variables = locals()
         #print(self.local_variables)
@@ -306,12 +294,32 @@ class ActionBar(customtkinter.CTkFrame):
 
     # Configures initialised buttons
     # TODO: Use dictionary arguments **parameters
-    def action_config(self, button_row, input_text, function):
-        update_button = self.local_variables[f"option_{button_row}"]    # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
-        update_button.configure(text=input_text, command=function)      # format() is not needed: format(f"option_{button_row}")
-        update_button.grid(row=button_row)
-        locals(self)[f"option_{button_row}"] = update_button # TODO Refer to previous TODO
-        update_button.grid_forget()
+    #def action_config(self, button_row, input_text, function):
+    #    update_button = self.local_variables[f"option_{button_row}"]    # TODO Replace update_button with locals(self)[format(f"option_{button}")] as Python variables are stupid
+    #    update_button.configure(text=input_text, command=function)      # format() is not needed: format(f"option_{button_row}")
+    #    update_button.grid(row=button_row)
+    #    locals(self)[f"option_{button_row}"] = update_button # TODO Refer to previous TODO
+    #    update_button.grid_forget()
+
+    def action_config(self,
+                      button_row,
+                      button_text: str = "DESC_Placeholder_Button_Text",
+                      label_text: str = "DESC_Placeholder_Label_Text",
+                      command: Union[Callable[[], None], None] = lambda: placeholder_function()):
+        
+        # Old Code
+        #if "text" in parameters: #TODO Change to button reference
+        #    self.local_variables[f"option_{button_row}"].configure(text=parameters["text"])
+        #if "command" in parameters:
+        #    self.local_variables[f"option_{button_row}"].configure(command=lambda: parameters["command"])
+
+
+        self.local_variables[f"option_{button_row}"].button.configure(text=loc(button_text), command=command)
+        self.local_variables[f"option_{button_row}"].button.grid(row=0, column=0, padx=10)
+        self.local_variables[f"option_{button_row}"].label.configure(text=loc(label_text))
+        self.local_variables[f"option_{button_row}"].label.grid(row=0, column=1, padx=10)
+
+        self.local_variables[f"option_{button_row}"].grid(row=button_row, pady=10, sticky="EW")
 
     def disable_option(self, button_row):
         self.local_variables[f"option_{button_row}"].grid_forget()

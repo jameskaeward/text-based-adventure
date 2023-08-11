@@ -9,6 +9,7 @@
     - [ ] Add multiple saves
 - [ ] Merchant encounter for loop
 - [ ] Loop for dialogue interaction (Printing text)
-- [ ] Make a launcher
+- [-] Make a launcher
 - [ ] Random Rooms
     - [ ] Dungeon + Town
+    - [ ] Dungeon Room Buttons
