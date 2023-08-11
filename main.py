@@ -235,10 +235,11 @@ class SideBar(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
 
-        self.grid_rowconfigure(5, weight=1)
+        self.grid_rowconfigure((1, 2, 3, 4), weight=0)
+        self.grid_rowconfigure(5, weight=10)
 
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=font_bold)
-        self.label.grid(row=0, column=0, padx=20)
+        self.label.grid(row=0, column=0, padx=10, sticky="N")
 
         self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=master.open_settings)
         self.open_settings.grid(row=1, column=0, pady=10)
@@ -266,26 +267,31 @@ class ActionBar(customtkinter.CTkFrame):
 
         self.title = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Action_Bar"), font=font_bold)
         self.title.grid(row=0, column=1, padx=10, pady=10, sticky="NSEW")
-        self.options = customtkinter.CTkFrame(master=self)
+        self.options = customtkinter.CTkFrame(master=self, fg_color="transparent")
         self.options.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky="W")
 
         # Options Pre-Initialise
 
-        option_1 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_1.button = customtkinter.CTkButton(master=option_1, width=10)
-        option_1.label = customtkinter.CTkLabel(master=option_1, width=10)
+        for x in range(1, 4):
+            locals()[f"option_{x}"] = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+            locals()[f"option_{x}"].button = customtkinter.CTkButton(master=locals()[f"option_{x}"], width=10)
+            locals()[f"option_{x}"].label = customtkinter.CTkLabel(master=locals()[f"option_{x}"], width=10)
 
-        option_2 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_2.button = customtkinter.CTkButton(master=option_2, width=10)
-        option_2.label = customtkinter.CTkLabel(master=option_2, width=10)
+        # option_1 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        # option_1.button = customtkinter.CTkButton(master=option_1, width=10)
+        # option_1.label = customtkinter.CTkLabel(master=option_1, width=10)
 
-        option_3 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_3.button = customtkinter.CTkButton(master=option_3, width=10)
-        option_3.label = customtkinter.CTkLabel(master=option_3, width=10)
+        # option_2 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        # option_2.button = customtkinter.CTkButton(master=option_2, width=10)
+        # option_2.label = customtkinter.CTkLabel(master=option_2, width=10)
 
-        option_4 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
-        option_4.button = customtkinter.CTkButton(master=option_4, width=10)
-        option_4.label = customtkinter.CTkLabel(master=option_4, width=10)
+        # option_3 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        # option_3.button = customtkinter.CTkButton(master=option_3, width=10)
+        # option_3.label = customtkinter.CTkLabel(master=option_3, width=10)
+
+        # option_4 = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
+        # option_4.button = customtkinter.CTkButton(master=option_4, width=10)
+        # option_4.label = customtkinter.CTkLabel(master=option_4, width=10)
 
         self.local_variables = locals()
         #print(self.local_variables)
