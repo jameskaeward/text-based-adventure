@@ -17,12 +17,12 @@ def read_config():
     return config_read
 
 if __name__ == "__main__":
-    global language
+    global _language
     global _font_size
-    global settings
-    settings = read_config()
-    language = str(settings["Settings"]["language"])
-    _font_size = int(settings["Settings"]["font_size"])
+    global _settings
+    _settings = read_config()
+    _language = str(_settings["Settings"]["language"])
+    _font_size = int(_settings["Settings"]["font_size"])
 
 def placeholder_function():
     print(loc("TEST_Hello_World"))
@@ -32,9 +32,9 @@ def placeholder_function():
 ######################
 
 def loc(loc_id):
-    if language == "l_english":
+    if _language == "l_english":
         text = localisation.l_english.get(loc_id)
-    if language == "l_french":
+    if _language == "l_french":
         text = localisation.l_french.get(loc_id)
     
     if text == None:
@@ -108,10 +108,10 @@ class Map(customtkinter.CTkToplevel):
 
         # Navigation Buttons
         if app.game.player is None: # User should not see this
-            self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=font_bold)
+            self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
-            self.warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=font_default)
+            self.warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=_font_default)
             self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player doesn't exist!")
@@ -123,7 +123,7 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
+            self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
@@ -147,7 +147,7 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            self.label = customtkinter.CTkLabel(self, text=player_location, font=font_bold)
+            self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             # navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
@@ -182,16 +182,16 @@ class Settings(customtkinter.CTkToplevel):
 
         font_sizes = ["15", "20", "25", "30"]
         
-        self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=font_bold)
+        self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=_font_bold)
         self.label.pack(pady=10)
 
-        self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=font_default)
+        self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=_font_default)
         self.language_select_label.pack(pady=10)
         self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language)
-        self.language_select.set(localisation.l_index_reverse.get(language))
+        self.language_select.set(localisation.l_index_reverse.get(_language))
         self.language_select.pack(pady=10)
 
-        self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=font_default)
+        self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=_font_default)
         self.font_select_label.pack(pady=10)
         self.font_select = customtkinter.CTkOptionMenu(self, values = font_sizes, command = self.change_font_size)
         self.font_select.set(_font_size)
@@ -226,11 +226,11 @@ class App(customtkinter.CTk):
 
         # Setting font here as it gives an error when set outside
 
-        global font_default
-        global font_bold
+        global _font_default
+        global _font_bold
 
-        font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
-        font_bold = customtkinter.CTkFont(size=_font_size*2, weight="bold")
+        _font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
+        _font_bold = customtkinter.CTkFont(size=_font_size*2, weight="bold")
 
         self.game = Game()
 
@@ -280,7 +280,7 @@ class SideBar(customtkinter.CTkFrame):
         self.grid_rowconfigure((1, 2, 3, 4), weight=0)
         self.grid_rowconfigure(5, weight=10)
 
-        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=font_bold)
+        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=_font_bold)
         self.label.grid(row=0, column=0, padx=10, sticky="N")
 
         self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=master.open_settings)
@@ -297,7 +297,7 @@ class MainWindow(customtkinter.CTkFrame):
 
         self.grid_columnconfigure(1, weight=1)
         
-        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=font_bold)
+        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=_font_bold)
         self.label.grid(row=0, column=1)
 
 
@@ -307,7 +307,7 @@ class ActionBar(customtkinter.CTkFrame):
 
         self.grid_columnconfigure(1, weight=1)
 
-        self.title = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Action_Bar"), font=font_bold)
+        self.title = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Action_Bar"), font=_font_bold)
         self.title.grid(row=0, column=1, padx=10, pady=10, sticky="NSEW")
         self.options = customtkinter.CTkFrame(master=self, fg_color="transparent")
         self.options.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky="W")
