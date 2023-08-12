@@ -16,7 +16,7 @@ l_english = {
 
     # Title
 
-    "NAME_Text_Based_Adventure": "Text Based Adventure",
+    "NAME_Text_Based_Adventure": "Graphics Based Adventure",
     "ACTION_Start_Game": "Start Game",
 
     "NAME_Action_Bar": "Action Bar",

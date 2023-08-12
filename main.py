@@ -41,7 +41,7 @@ def loc(loc_id):
     if text == None:
         text = loc_id
 
-    # text = "Max is a Noob"
+    # text = "MAX IS A NOOB"
 
     return text
 
@@ -119,6 +119,8 @@ class Player():
             app.actionbar.disable_option(2)
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
+
+            # TODO: Add secret when a key is found in dungeon
 
         if location == "location_Shop":
             print("Now in shop")
