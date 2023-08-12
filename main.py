@@ -172,8 +172,9 @@ class Player():
         # Set exit parameters here
         # TODO: Difficulty settings or different dungeons
 
-        minimum_dungeon_rooms = -3
-        exit_threshold = -5
+        # NOTE Make sure to change these values when testing is done
+        minimum_dungeon_rooms = 3 
+        exit_threshold = 5 
 
         # The Exit
         if self.dungeon_count >= minimum_dungeon_rooms: # Must enter a mininum number of rooms before having a chance to exit
