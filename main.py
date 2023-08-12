@@ -87,6 +87,7 @@ class Player():
         self.gold = 0
         self.dungeon_count = 0
         self.busy = False # NOTE: For use with the map so player cannot run away
+        self.in_combat = False
         # self.secrets = [] # TODO: Add to secrets
         # self.location = "location_Central"
         self.town_move("location_Central")
@@ -216,8 +217,10 @@ class Map(customtkinter.CTkToplevel):
         self.rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
 
-        # Navigation Buttons
-        if app.game.player is None: # Player should not see this
+        ## Navigation Buttons
+
+        # Player should not see this, checks if player is present
+        if app.game.player is None: 
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
@@ -225,6 +228,21 @@ class Map(customtkinter.CTkToplevel):
             self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player doesn't exist!")
+            return
+        
+        # Player must finish interactions before moving to another location
+        if app.game.player.busy is True or app.game.player.in_combat is True:
+            self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
+            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+
+            if app.game.player.in_combat is True:
+                self.warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
+                self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
+            else:
+                self.warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction"), font=_font_default)
+                self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
+
+            # print("Player is busy!")
             return
 
         if app.game.player.location in world.town: # If player is in town

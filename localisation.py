@@ -36,6 +36,10 @@ l_english = {
     # Map Locations
 
     "DESC_Current_Location": "Current Location: ",
+    
+    "DESC_Finish_Interaction": "You cannot leave until you have finished the interaction",
+    "DESC_Finish_Interaction_Combat": "You cannot run away, there are monsters nearby!",
+
     "NAME_Entrance": "Entrance",
     "NAME_Main_Hall": "Town Hall",
     "NAME_Equipment_Shop": "Augury and Alchemy",
