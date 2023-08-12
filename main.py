@@ -334,7 +334,7 @@ class App(customtkinter.CTk):
 
 class BaseFrame(customtkinter.CTkFrame):
     def __init__(self, master):
-        super().__init__(master)
+        super().__init__(master, fg_color="transparent")
     
     def starting_frame(self, master):
 
