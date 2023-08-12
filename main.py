@@ -98,36 +98,39 @@ class Player():
 
         if location == "location_Entrance":
             print("Now in entrance")
-            app.actionbar.action_config(1, text="DESC_Enter_Dungeon", command=self.enter_dungeon)
+            app.actionbar.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
             app.actionbar.disable_option(2)
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
 
         if location == "location_Main_Hall":
             print("Now in main hall")
-            app.actionbar.action_config(1)
+            app.actionbar.action_config(1, text="ACTION_Upgrade_Skills")
             app.actionbar.disable_option(2)
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
 
         if location == "location_Shop":
             print("Now in shop")
-            app.actionbar.action_config(1)
-            app.actionbar.action_config(2)
+            app.actionbar.action_config(1, text="ACTION_Buy_Item")
+            app.actionbar.action_config(2, text="ACTION_Sell_Item")
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
 
         if location == "location_Central":
             print("Now in central")
-            app.actionbar.action_config(1)
-            app.actionbar.action_config(2)
-            app.actionbar.action_config(3)
-            app.actionbar.action_config(4)
+            app.actionbar.action_config(1, text="ACTION_View_Achievements")
+            app.actionbar.action_config(2, text="ACTION_Save_Game")
+            app.actionbar.action_config(3, text="ACTION_Load_Game")
+            # app.actionbar.action_config(4, text="ACTION_Save_Game")
+            # app.actionbar.disable_option(3)
+            app.actionbar.disable_option(4)
 
         if location == "location_Tavern":
             print("Now in tavern")
-            app.actionbar.action_config(1)
-            app.actionbar.action_config(2)
+            app.actionbar.action_config(1, text="ACTION_View_Questboard")
+            # app.actionbar.action_config(2)
+            app.actionbar.disable_option(2)
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
 
@@ -152,7 +155,7 @@ class Map(customtkinter.CTkToplevel):
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
 
         # Navigation Buttons
-        if app.game.player is None: # User should not see this
+        if app.game.player is None: # Player should not see this
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
@@ -276,23 +279,29 @@ class App(customtkinter.CTk):
         global _font_bold
 
         _font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
-        _font_bold = customtkinter.CTkFont(size=_font_size*2, weight="bold")
+        _font_bold = customtkinter.CTkFont(size=round(_font_size*1.3), weight="bold")
 
         self.game = Game()
 
         self.geometry("1000x500")
         self.title(loc("NAME_Text_Based_Adventure"))
 
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        # self.grid_columnconfigure(1, weight=1)
+        # self.grid_rowconfigure(0, weight=1)
 
-        self.actionbar = ActionBar(self)
+        self.start_frame = BaseFrame(self)
+        self.start_frame.starting_frame(self)
+        self.start_frame.pack(expand=True)
+        self.main_frame = BaseFrame(self)
+        self.main_frame.main_frame()
+
+        self.actionbar = ActionBar(self.main_frame)
         self.actionbar.grid(row=1, column=1, sticky="NESW")
 
-        self.mainwindow = MainWindow(self)
+        self.mainwindow = MainWindow(self.main_frame)
         self.mainwindow.grid(row=0, column=1, sticky="NESW")
 
-        self.sidebar = SideBar(self)
+        self.sidebar = SideBar(self.main_frame, self)
         self.sidebar.grid(row=0, rowspan=2, column=0, padx=10)
 
         self.map = None
@@ -318,9 +327,29 @@ class App(customtkinter.CTk):
         else:
             self.settings.focus()  # if window exists focus it
 
+    def start_game(self):
+        self.start_frame.pack_forget()
+        self.main_frame.pack(expand=True, fill="both")
+        self.game.start_game()
+
+class BaseFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+    
+    def starting_frame(self, master):
+
+        self.title = customtkinter.CTkLabel(self, text=loc("NAME_Text_Based_Adventure"), font=_font_bold)
+        self.title.pack(expand=True, pady=10)
+        self.button = customtkinter.CTkButton(self, text=loc("ACTION_Start_Game"), font=_font_bold, command=master.start_game)
+        self.button.pack(pady=10)
+
+    def main_frame(self):
+
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
 class SideBar(customtkinter.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, app):
         super().__init__(master, fg_color="transparent")
 
         self.grid_rowconfigure((1, 2, 3, 4), weight=0)
@@ -329,12 +358,12 @@ class SideBar(customtkinter.CTkFrame):
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=_font_bold)
         self.label.grid(row=0, column=0, padx=10, sticky="N")
 
-        self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=master.open_settings)
+        self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=app.open_settings)
         self.open_settings.grid(row=1, column=0, pady=10)
-        self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=master.open_map)
+        self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=app.open_map)
         self.open_map.grid(row=2, column=0, pady=10)
-        self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=master.game.start_game)
-        self.test_game.grid(row=3, column=0, pady=10)
+        # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=app.game.start_game)
+        # self.test_game.grid(row=3, column=0, pady=10)
 
 
 class MainWindow(customtkinter.CTkFrame):
@@ -469,5 +498,6 @@ class ActionBar(customtkinter.CTkFrame):
 
 ## This runs the application ##
 if __name__ == "__main__":
+    global app
     app = App()
     app.mainloop()

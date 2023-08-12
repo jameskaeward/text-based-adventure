@@ -17,6 +17,8 @@ l_english = {
     # Title
 
     "NAME_Text_Based_Adventure": "Text Based Adventure",
+    "ACTION_Start_Game": "Start Game",
+
     "NAME_Action_Bar": "Action Bar",
 
     # Menus
@@ -35,6 +37,10 @@ l_english = {
 
     "DESC_Current_Location": "Current Location: ",
     "NAME_Entrance": "Entrance",
+    "NAME_Main_Hall": "Town Hall",
+    "NAME_Equipment_Shop": "Augury and Alchemy",
+    "NAME_Central": "Plaza",
+    "NAME_Tavern": "The Hypnotic Meerkat",
 
     # Settings
 
