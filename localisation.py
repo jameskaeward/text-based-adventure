@@ -63,6 +63,11 @@ l_english = {
     "LOG_Game_Start": "Game Start",
     "LOG_Player_Spawned": "Player Spawned",
     "LOG_Player_Already_Spawned": "Player Already Spawned",
+
+    "LOG_Entering_Dungeon": "Entering Dungeon",
+    "LOG_Exiting_Dungeon": "Exiting Dungeon",
+    "LOG_Moving_Player": "Moving player to",
+
 }
 
 l_french = {

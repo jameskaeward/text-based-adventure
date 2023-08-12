@@ -80,13 +80,18 @@ class Game():
 class Player():
     def __init__(self):
         self.state = True # Alive
+        self.hp_max = 10
         self.hp = 10
+        self.mp_max = 10
         self.mp = 10
         self.gold = 0
         self.dungeon_count = 0
+        self.busy = False # NOTE: For use with the map so player cannot run away
+        # self.secrets = [] # TODO: Add to secrets
         # self.location = "location_Central"
         self.town_move("location_Central")
     
+    # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
         print(loc("LOG_Moving_Player"), location)
         self.location = location
@@ -145,11 +150,55 @@ class Player():
         self.dungeon_move(random_room)
         print("Entering: ", random_room)
 
-    def dungeon_move(self, room):
+    def exit_dungeon(self):
+        print(loc("LOG_Exiting_Dungeon"))
+        self.hp = self.hp_max # Could change to recharge at central plaza
+        self.mp = self.mp_max # 
+        print("Dungeon Room Count: ", self.dungeon_count)
+        self.dungeon_count = 0 # NOTE: Probably unecessary but sets to 0 anyway
+        self.town_move("location_Entrance")
 
+    def dungeon_move(self, room):
+        
         if room not in world.dungeon:
             print("ERROR: Wrong dungeon room")
             return
+
+        app.actionbar.disable_option(1)
+        app.actionbar.disable_option(2)
+        app.actionbar.disable_option(3)
+        app.actionbar.disable_option(4)
+
+        # Set exit parameters here
+        # TODO: Difficulty settings or different dungeons
+
+        minimum_dungeon_rooms = -3
+        exit_threshold = -5
+
+        # The Exit
+        if self.dungeon_count >= minimum_dungeon_rooms: # Must enter a mininum number of rooms before having a chance to exit
+
+            exit_chance = self.dungeon_count*random.random()
+            print("Exit chance: ", exit_chance)
+
+            if exit_chance > exit_threshold:
+                app.actionbar.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
+                return # Function stops here to not continue into dungeon
+
+        self.dungeon_count = self.dungeon_count + 1
+
+        # The Dungeon
+        if room == "location_dungeon_room_1":
+            app.actionbar.action_config(1, text="ACTION_1")
+
+        if room == "location_dungeon_room_2":
+            app.actionbar.action_config(1, text="ACTION_2")
+        
+        if room == "location_dungeon_room_3":
+            app.actionbar.action_config(1, text="ACTION_3")
+
+        if room == "location_dungeon_room_4":
+            app.actionbar.action_config(1, text="ACTION_4")
 
 ###############
 ##### GUI #####

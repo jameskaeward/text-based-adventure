@@ -23,11 +23,11 @@ town = [
 ]
 
 dungeon = [
-
-    "location_dungeon_room_1", # TODO: Add comments here for room description
-    "location_dungeon_room_2",
-    "location_dungeon_room_3",
-    "location_dungeon_room_4",
+                                # TODO: Add comments here for room description
+    "location_dungeon_room_1",  # 
+    "location_dungeon_room_2",  # 
+    "location_dungeon_room_3",  # 
+    "location_dungeon_room_4",  # 
 
 ]
 
