@@ -88,12 +88,13 @@ class Player():
         self.dungeon_count = 0
         self.busy = False # NOTE: For use with the map so player cannot run away
         self.in_combat = False
-        # self.secrets = [] # TODO: Add to secrets
+        # self.tags = [] # TODO: Incorporate all checks into this list
         # self.location = "location_Central"
         self.town_move("location_Central")
     
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
+        app.close_map() # No abusing the map
         print(loc("LOG_Moving_Player"), location)
         self.location = location
         self.town_actions(location)
@@ -144,6 +145,9 @@ class Player():
             app.actionbar.disable_option(4)
 
     def enter_dungeon(self):
+        app.close_map() # No abusing the map
+        self.busy = False
+        self.in_combat = False
         print(loc("LOG_Entering_Dungeon"))
         self.location = "location_Dungeon"
         self.dungeon_count = 0
@@ -152,6 +156,9 @@ class Player():
         print("Entering: ", random_room)
 
     def exit_dungeon(self):
+        app.close_map() # No abusing the map
+        self.busy = False
+        self.in_combat = False
         print(loc("LOG_Exiting_Dungeon"))
         self.hp = self.hp_max # Could change to recharge at central plaza
         self.mp = self.mp_max # 
@@ -160,6 +167,7 @@ class Player():
         self.town_move("location_Entrance")
 
     def dungeon_move(self, room):
+        app.close_map() # No abusing the map
         
         if room not in world.dungeon:
             print("ERROR: Wrong dungeon room")
@@ -175,7 +183,7 @@ class Player():
 
         # NOTE Make sure to change these values when testing is done
         minimum_dungeon_rooms = 3 
-        exit_threshold = 5 
+        exit_threshold = 5
 
         # The Exit
         if self.dungeon_count >= minimum_dungeon_rooms: # Must enter a mininum number of rooms before having a chance to exit
@@ -184,22 +192,28 @@ class Player():
             print("Exit chance: ", exit_chance)
 
             if exit_chance > exit_threshold:
+                self.busy = True
                 app.actionbar.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
+                app.actionbar.action_config(2, text="ACTION_Return_Dungeon", command=self.enter_dungeon)
                 return # Function stops here to not continue into dungeon
 
         self.dungeon_count = self.dungeon_count + 1
 
         # The Dungeon
         if room == "location_dungeon_room_1":
+            self.busy = True
             app.actionbar.action_config(1, text="ACTION_1")
 
         if room == "location_dungeon_room_2":
+            self.busy = True
             app.actionbar.action_config(1, text="ACTION_2")
         
         if room == "location_dungeon_room_3":
+            self.busy = True
             app.actionbar.action_config(1, text="ACTION_3")
 
         if room == "location_dungeon_room_4":
+            self.busy = True
             app.actionbar.action_config(1, text="ACTION_4")
 
 ###############
@@ -310,7 +324,7 @@ class Map(customtkinter.CTkToplevel):
             print("ERROR: map_move called incorrecty")
             return
         
-        self.destroy()
+        # self.destroy()
 
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, master):
@@ -417,6 +431,13 @@ class App(customtkinter.CTk):
             self.map = Map(self)  # Create window if its None or destroyed
         else:
             self.map.focus()  # if window exists focus it
+
+    def close_map(self):
+        if self.map is None or not self.map.winfo_exists():
+            # print("No map to destroy")
+            pass
+        else:
+            self.map.destroy()
 
     def open_settings(self):
         if self.settings is None or not self.settings.winfo_exists():

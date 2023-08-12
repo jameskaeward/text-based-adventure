@@ -37,7 +37,7 @@ l_english = {
 
     "DESC_Current_Location": "Current Location: ",
     
-    "DESC_Finish_Interaction": "You cannot leave until you have finished the interaction",
+    "DESC_Finish_Interaction": "The map cannot be used right now",
     "DESC_Finish_Interaction_Combat": "You cannot run away, there are monsters nearby!",
 
     "NAME_Entrance": "Entrance",
@@ -57,6 +57,19 @@ l_english = {
     "NAME_Font_Size": "Font Size",
 
     "DESC_Apply_To_Restart": "Restart application to apply settings.",
+
+    # Gameplay
+
+    "ACTION_Enter_Dungeon": "Enter the dungeon",
+    "ACTION_Upgrade_Skills": "Upgrade skills",
+    "ACTION_Buy_Item": "Buy item",
+    "ACTION_Sell_Item": "Sell item",
+    "ACTION_View_Achievements": "View accomplishments",
+    "ACTION_Save_Game": "Save game",
+    "ACTION_Load_Game": "Load game",
+    "ACTION_View_Questboard": "View questboard",
+    "ACTION_Exit_Dungeon": "Exit the dungeon",
+    "ACTION_Return_Dungeon": "Return to the dungeon",
 
     # Testing Localisation
 
