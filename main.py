@@ -81,11 +81,56 @@ class Player():
         self.state = True # Alive
         self.hp = 10
         self.mp = 10
-        self.location = "location_Central"
+        # self.location = "location_Central"
+        self.town_move("location_Central")
     
     def town_move(self, location):
         print(loc("LOG_Moving_Player"), location)
         self.location = location
+        self.town_actions(location)
+
+    def town_actions(self, location):
+
+        # Error Check
+        if location not in world.town:
+            print("ERROR: Player not in town")
+            return
+
+        if location == "location_Entrance":
+            print("Now in entrance")
+            app.actionbar.action_config(1, button_text=" ", label_text="DESC_Enter_Dungeon")
+            app.actionbar.disable_option(2)
+            app.actionbar.disable_option(3)
+            app.actionbar.disable_option(4)
+
+        if location == "location_Main_Hall":
+            print("Now in main hall")
+            app.actionbar.action_config(1)
+            app.actionbar.disable_option(2)
+            app.actionbar.disable_option(3)
+            app.actionbar.disable_option(4)
+
+        if location == "location_Shop":
+            print("Now in shop")
+            app.actionbar.action_config(1)
+            app.actionbar.action_config(2)
+            app.actionbar.disable_option(3)
+            app.actionbar.disable_option(4)
+
+        if location == "location_Central":
+            print("Now in central")
+            app.actionbar.action_config(1)
+            app.actionbar.action_config(2)
+            app.actionbar.action_config(3)
+            app.actionbar.action_config(4)
+
+        if location == "location_Tavern":
+            print("Now in tavern")
+            app.actionbar.action_config(1)
+            app.actionbar.action_config(2)
+            app.actionbar.disable_option(3)
+            app.actionbar.disable_option(4)
+
 
     def enter_dungeon(self):
         print(loc("LOG_Entering_Dungeon"))
@@ -256,10 +301,10 @@ class App(customtkinter.CTk):
         # Initial Button Configuration
         # TODO: Move check for location, then change
 
-        self.actionbar.action_config(1)
-        self.actionbar.action_config(2)
-        self.actionbar.action_config(3)
-        self.actionbar.action_config(4)
+        # self.actionbar.action_config(1)
+        # self.actionbar.action_config(2)
+        # self.actionbar.action_config(3)
+        # self.actionbar.action_config(4)
 
     def open_map(self):
         if self.map is None or not self.map.winfo_exists():
@@ -420,6 +465,7 @@ class ActionBar(customtkinter.CTkFrame):
 # print("Hello World")
 
 # https://felipetesc.github.io/CtkDocs/#/multiple_frames
+# https://pythonguides.com/convert-python-file-to-exe-using-pyinstaller/
 
 ## This runs the application ##
 if __name__ == "__main__":

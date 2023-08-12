@@ -30,3 +30,6 @@ dungeon = [
     "location_dungeon_room_4",
 
 ]
+
+if __name__ == "__main__":
+    print("Run the Main File!")
