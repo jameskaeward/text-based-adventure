@@ -98,7 +98,7 @@ class Player():
 
         if location == "location_Entrance":
             print("Now in entrance")
-            app.actionbar.action_config(1, button_text=" ", label_text="DESC_Enter_Dungeon")
+            app.actionbar.action_config(1, text="DESC_Enter_Dungeon", command=self.enter_dungeon)
             app.actionbar.disable_option(2)
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
@@ -397,8 +397,8 @@ class ActionBar(customtkinter.CTkFrame):
 
     def action_config(self,
                       button_row,
-                      button_text: str = "DESC_Placeholder_Button_Text",
-                      label_text: str = "DESC_Placeholder_Label_Text",
+                      text: str = "DESC_Placeholder_Button_Text",
+                    #   label_text: str = "DESC_Placeholder_Label_Text",
                       command: Union[Callable[[], None], None] = lambda: placeholder_function()):
         
         # Old Code
@@ -408,10 +408,10 @@ class ActionBar(customtkinter.CTkFrame):
         #    self.local_variables[f"option_{button_row}"].configure(command=lambda: parameters["command"])
 
 
-        self.local_variables[f"option_{button_row}"].button.configure(text=loc(button_text), command=command)
+        self.local_variables[f"option_{button_row}"].button.configure(text=f"{button_row}. "+loc(text), command=command)
         self.local_variables[f"option_{button_row}"].button.grid(row=0, column=0, padx=10)
-        self.local_variables[f"option_{button_row}"].label.configure(text=loc(label_text))
-        self.local_variables[f"option_{button_row}"].label.grid(row=0, column=1, padx=10)
+        # self.local_variables[f"option_{button_row}"].label.configure(text=loc(label_text))
+        # self.local_variables[f"option_{button_row}"].label.grid(row=0, column=1, padx=10)
 
         self.local_variables[f"option_{button_row}"].grid(row=button_row, pady=10, sticky="EW")
 
