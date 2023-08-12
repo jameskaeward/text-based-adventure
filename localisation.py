@@ -42,6 +42,8 @@ l_english = {
     "NAME_Central": "Plaza",
     "NAME_Tavern": "The Hypnotic Meerkat",
 
+    "NAME_Dungeon": "The Dungeon",
+
     # Settings
 
     "NAME_English": "English",
@@ -54,7 +56,8 @@ l_english = {
 
     # Testing Localisation
 
-    "TEST_Hello_World": "Hello World!",
+    # "TEST_Hello_World": "Hello World!",
+    "TEST_Hello_World": "Feature not yet implemented",
     "NAME_Test": "Test",
 
     "LOG_Game_Start": "Game Start",

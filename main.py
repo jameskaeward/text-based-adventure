@@ -6,6 +6,7 @@ import localisation
 import config
 import configparser
 import gameworld as world
+import random
 
 # TODO: Add to settings menu
 customtkinter.set_appearance_mode("system")
@@ -81,6 +82,8 @@ class Player():
         self.state = True # Alive
         self.hp = 10
         self.mp = 10
+        self.gold = 0
+        self.dungeon_count = 0
         # self.location = "location_Central"
         self.town_move("location_Central")
     
@@ -134,10 +137,19 @@ class Player():
             app.actionbar.disable_option(3)
             app.actionbar.disable_option(4)
 
-
     def enter_dungeon(self):
         print(loc("LOG_Entering_Dungeon"))
         self.location = "location_Dungeon"
+        self.dungeon_count = 0
+        random_room = random.choice(world.dungeon)
+        self.dungeon_move(random_room)
+        print("Entering: ", random_room)
+
+    def dungeon_move(self, room):
+
+        if room not in world.dungeon:
+            print("ERROR: Wrong dungeon room")
+            return
 
 ###############
 ##### GUI #####
@@ -174,19 +186,19 @@ class Map(customtkinter.CTkToplevel):
             self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
+            navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance", in_dungeon=False))
             navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
 
-            navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall"))
+            navbutton2 = customtkinter.CTkButton(self, text=loc("NAME_Main_Hall"), command=lambda: self.map_move("location_Main_Hall", in_dungeon=False))
             navbutton2.grid(row=2, column=3, padx=10, pady=10, sticky="NESW")
 
-            navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern"))
+            navbutton3 = customtkinter.CTkButton(self, text=loc("NAME_Tavern"), command=lambda: self.map_move("location_Tavern", in_dungeon=False))
             navbutton3.grid(row=4, column=1, padx=10, pady=10, sticky="NESW")
 
-            navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop"))
+            navbutton4 = customtkinter.CTkButton(self, text=loc("NAME_Equipment_Shop"), command=lambda: self.map_move("location_Shop", in_dungeon=False))
             navbutton4.grid(row=4, column=5, padx=10, pady=10, sticky="NESW")
 
-            navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
+            navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central", in_dungeon=False))
             navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
 
         else: # If player is in the dungeon
@@ -197,6 +209,11 @@ class Map(customtkinter.CTkToplevel):
 
             self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+
+            # TODO: Random buttons with random commands
+
+            # Template Dungeon Button
+            templatebutton = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance", in_dungeon=True))
 
             # navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance"))
             # navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
@@ -213,8 +230,18 @@ class Map(customtkinter.CTkToplevel):
             # navbutton5 = customtkinter.CTkButton(self, text=loc("NAME_Central"), command=lambda: self.map_move("location_Central"))
             # navbutton5.grid(row=4, column=3, padx=10, pady=10, sticky="NESW")
 
-    def map_move(self, new_location):
-        app.game.player.town_move(new_location)
+    def map_move(self, new_location, in_dungeon):
+        if in_dungeon == False:
+            app.game.player.town_move(new_location)
+            move = True
+        if in_dungeon == True:
+            app.game.player.dungeon_move(new_location)
+            move = True
+
+        if move is not True:
+            print("ERROR: map_move called incorrecty")
+            return
+        
         self.destroy()
 
 class Settings(customtkinter.CTkToplevel):
@@ -262,7 +289,9 @@ class Settings(customtkinter.CTkToplevel):
             self.restart = customtkinter.CTkLabel(self, text=loc("DESC_Apply_To_Restart"))
             self.restart.pack(pady=10)
 
-## Main Frames
+#################
+## Main Frames ##
+#################
 
 class App(customtkinter.CTk):
 
@@ -365,7 +394,6 @@ class SideBar(customtkinter.CTkFrame):
         # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=app.game.start_game)
         # self.test_game.grid(row=3, column=0, pady=10)
 
-
 class MainWindow(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
@@ -374,7 +402,6 @@ class MainWindow(customtkinter.CTkFrame):
         
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=_font_bold)
         self.label.grid(row=0, column=1)
-
 
 class ActionBar(customtkinter.CTkFrame):
     def __init__(self, master):
