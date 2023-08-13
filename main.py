@@ -7,10 +7,16 @@ import config
 import configparser
 import gameworld as world
 import random
+import PIL.Image
+import os.path
 
 # TODO: Add to settings menu
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
+
+############################
+#### External Functions ####
+############################
 
 def read_config():
     config_read = configparser.ConfigParser()
@@ -28,10 +34,6 @@ if __name__ == "__main__":
 def placeholder_function():
     print(loc("TEST_Hello_World"))
 
-######################
-#### Localisation ####
-######################
-
 def loc(loc_id):
     if _language == "l_english":
         text = localisation.l_english.get(loc_id)
@@ -44,6 +46,21 @@ def loc(loc_id):
     # text = "MAX IS A NOOB"
 
     return text
+
+def image(image_id):
+    image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
+    image_location = localisation.images.get(image_id)
+    image_location_absolute = os.path.join(image_path, image_location[0])
+    image = customtkinter.CTkImage(PIL.Image.open(image_location_absolute), size=(image_location[1], image_location[2]))
+
+    # print(image_path)
+    # print(image_location)
+    # print(image_location_absolute)
+    # print(image)
+
+    return image
+
+# image("IMAGE_Placeholder")
 
 ##############
 #### Game ####
