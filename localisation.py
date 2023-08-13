@@ -14,7 +14,7 @@ l_index_reverse = {
 
 images = {
 
-    # "TAG": ["File Location", Image Size (x), Image Size (y)]
+    # "TAG": ["File Location", Image Width, Image Height]
 
     "IMAGE_Placeholder": ["placeholder.png", 1000, 1000],
 
