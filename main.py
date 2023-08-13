@@ -108,43 +108,34 @@ class Player():
 
         if location == "location_Entrance":
             print("Now in entrance")
+            app.actionbar.disable_all_options()
             app.actionbar.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
-            app.actionbar.disable_option(2)
-            app.actionbar.disable_option(3)
-            app.actionbar.disable_option(4)
 
         if location == "location_Main_Hall":
             print("Now in main hall")
-            app.actionbar.action_config(1, text="ACTION_Upgrade_Skills")
-            app.actionbar.disable_option(2)
-            app.actionbar.disable_option(3)
-            app.actionbar.disable_option(4)
+            app.actionbar.disable_all_options()
+            app.actionbar.action_config(1, text="ACTION_Wander_Around")
 
             # TODO: Add secret when a key is found in dungeon
 
         if location == "location_Shop":
             print("Now in shop")
+            app.actionbar.disable_all_options()
             app.actionbar.action_config(1, text="ACTION_Buy_Item")
             app.actionbar.action_config(2, text="ACTION_Sell_Item")
-            app.actionbar.disable_option(3)
-            app.actionbar.disable_option(4)
+            app.actionbar.action_config(3, text="ACTION_Upgrade_Skills")
 
         if location == "location_Central":
             print("Now in central")
+            app.actionbar.disable_all_options()
             app.actionbar.action_config(1, text="ACTION_View_Achievements")
             app.actionbar.action_config(2, text="ACTION_Save_Game")
             app.actionbar.action_config(3, text="ACTION_Load_Game")
-            # app.actionbar.action_config(4, text="ACTION_Save_Game")
-            # app.actionbar.disable_option(3)
-            app.actionbar.disable_option(4)
 
         if location == "location_Tavern":
             print("Now in tavern")
+            app.actionbar.disable_all_options()
             app.actionbar.action_config(1, text="ACTION_View_Questboard")
-            # app.actionbar.action_config(2)
-            app.actionbar.disable_option(2)
-            app.actionbar.disable_option(3)
-            app.actionbar.disable_option(4)
 
     def enter_dungeon(self):
         app.close_map() # No abusing the map
@@ -174,17 +165,14 @@ class Player():
         if room not in world.dungeon:
             print("ERROR: Wrong dungeon room")
             return
-
-        app.actionbar.disable_option(1)
-        app.actionbar.disable_option(2)
-        app.actionbar.disable_option(3)
-        app.actionbar.disable_option(4)
+        
+        app.actionbar.disable_all_options()
 
         # Set exit parameters here
         # TODO: Difficulty settings or different dungeons
 
         # NOTE Make sure to change these values when testing is done
-        minimum_dungeon_rooms = 3 
+        minimum_dungeon_rooms = 3
         exit_threshold = 5
 
         # The Exit
@@ -507,7 +495,9 @@ class ActionBar(customtkinter.CTkFrame):
 
         # Options Pre-Initialise
 
-        for x in range(1, 6):
+        self.total_options = range(1, 6)
+
+        for x in self.total_options:
             locals()[f"option_{x}"] = customtkinter.CTkFrame(master=self.options, fg_color="transparent")
             locals()[f"option_{x}"].button = customtkinter.CTkButton(master=locals()[f"option_{x}"], width=10)
             locals()[f"option_{x}"].label = customtkinter.CTkLabel(master=locals()[f"option_{x}"], width=10)
@@ -562,7 +552,12 @@ class ActionBar(customtkinter.CTkFrame):
 
         self.local_variables[f"option_{button_row}"].grid(row=button_row, pady=10, sticky="EW")
 
+    def disable_all_options(self):
+        for x in self.total_options:
+            self.disable_option(x)
+
     def disable_option(self, button_row):
+        # print("Disabling option: ", button_row)
         self.local_variables[f"option_{button_row}"].grid_forget()
 
     # # Old Code for dynamic number of options #

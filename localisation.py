@@ -19,7 +19,7 @@ l_english = {
     "NAME_Text_Based_Adventure": "Graphics Based Adventure",
     "ACTION_Start_Game": "Start Game",
 
-    "NAME_Action_Bar": "Action Bar",
+    "NAME_Action_Bar": "Actions",
 
     # Menus
 
@@ -60,14 +60,19 @@ l_english = {
 
     # Gameplay
 
-    "ACTION_Enter_Dungeon": "Enter the dungeon",
+    "ACTION_Wander_Around": "Look around",
+
     "ACTION_Upgrade_Skills": "Upgrade skills",
     "ACTION_Buy_Item": "Buy item",
     "ACTION_Sell_Item": "Sell item",
+
     "ACTION_View_Achievements": "View accomplishments",
     "ACTION_Save_Game": "Save game",
     "ACTION_Load_Game": "Load game",
+
     "ACTION_View_Questboard": "View questboard",
+
+    "ACTION_Enter_Dungeon": "Enter the dungeon",
     "ACTION_Exit_Dungeon": "Exit the dungeon",
     "ACTION_Return_Dungeon": "Return to the dungeon",
 
