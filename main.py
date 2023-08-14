@@ -47,6 +47,9 @@ def loc(loc_id):
 
     return text
 
+# def random_text(dictonary):
+#     random.choice()
+
 def image(image_id):
     image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
     image_location = localisation.images.get(image_id)
@@ -109,6 +112,10 @@ class Player():
         # self.location = "location_Central"
         self.town_move("location_Central")
     
+    def encounter(self, encounter_type):
+        self.busy = True
+        encounter = round(random.random(0, 5))
+
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
         app.close_map() # No abusing the map

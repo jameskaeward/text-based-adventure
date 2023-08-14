@@ -31,5 +31,16 @@ dungeon = [
 
 ]
 
+encounters = [
+
+    "encounter_chest",
+    "encounter_skeleton",
+    "encounter_zombie",
+    "encounter_ghost",
+    "encounter_slime",
+    "encounter_goblin",
+
+]
+
 if __name__ == "__main__":
     print("Run the Main File!")
