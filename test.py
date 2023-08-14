@@ -22,34 +22,39 @@ import random
 
 # IT WORKS
 
-random_dictionary = {
+# random_dictionary = {
 
-    "KEY_1": "Value 1",
-    "KEY_2": "Value 2",
-    "KEY_3": "Value 3",
-    "KEY_4": "Value 4",
-    "KEY_5": "Value 5",
-    "KEY_6": "Value 6",
+#     "KEY_1": "Value 1",
+#     "KEY_2": "Value 2",
+#     "KEY_3": "Value 3",
+#     "KEY_4": "Value 4",
+#     "KEY_5": "Value 5",
+#     "KEY_6": "Value 6",
 
-}
+# }
 
-def random_value(dictonary):
-    # dictonary_length = len(dictonary) - 1
-    dictionary_values = list(dictonary.values())
-    print(dictionary_values)
-    choice = random.choice(dictionary_values)
-    print(choice)
-    # print(dictonary_length)
-    # choice = random.randint(0, dictonary_length)
-    # print(choice)
-    # value = dictionary_values
-    # print(value)
-    # print(round(choice))
-    # choice = random.choice(dictonary)
-    # return choice
+# def random_value(dictonary):
+#     # dictonary_length = len(dictonary) - 1
+#     dictionary_values = list(dictonary.values())
+#     print(dictionary_values)
+#     choice = random.choice(dictionary_values)
+#     print(choice)
+#     # print(dictonary_length)
+#     # choice = random.randint(0, dictonary_length)
+#     # print(choice)
+#     # value = dictionary_values
+#     # print(value)
+#     # print(round(choice))
+#     # choice = random.choice(dictonary)
+#     # return choice
 
-# random_dictionary.
+# # random_dictionary.
 
-# print(random_dictionary.values())
+# # print(random_dictionary.values())
 
-random_value(random_dictionary)
+# random_value(random_dictionary)
+
+list = (1, 2, 5, 6, 9)
+
+for x in list:
+    print(x)

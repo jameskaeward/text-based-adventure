@@ -31,14 +31,30 @@ dungeon = [
 
 ]
 
-encounters = [
+encounters = {
 
-    "encounter_chest",
-    "encounter_skeleton",
-    "encounter_zombie",
-    "encounter_ghost",
-    "encounter_slime",
-    "encounter_goblin",
+    # encounter_name: [encounter_actions, attack, hp, reward]
+
+    "encounter_chest": [(0), 0, 10, 20],
+    "encounter_skeleton": [(1, 2), 0, 10, 20],
+    "encounter_zombie": [(1), 0, 10, 20],
+    "encounter_ghost": [(1, 2, 3, 4), 0, 10, 20],
+    "encounter_slime": [(1, 2, 3), 0, 10, 20],
+    "encounter_goblin": [(1, 2, 5), 0, 10, 20],
+
+}
+
+# TODO: Append and test to encounter instance
+# For x in encounters
+encounter_actions = [
+
+    "encounter_action_null",
+
+    "encounter_action_attack",
+    "encounter_action_defend",
+    "encounter_action_heal",
+    "encounter_action_recharge",
+    "encounter_action_run",
 
 ]
 

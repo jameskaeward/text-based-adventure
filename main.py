@@ -114,7 +114,7 @@ class Player():
     
     def encounter(self, encounter_type):
         self.busy = True
-        encounter = round(random.random(0, 5))
+        encounter = random.choice(list(world.encounters.keys))
 
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
@@ -229,6 +229,14 @@ class Player():
         if room == "location_dungeon_room_4":
             self.busy = True
             app.actionbar.action_config(1, text="ACTION_4")
+
+class Encounter():
+    def __init__(self, encounter_type):
+        
+        encounter_parameters = list(world.encounters.get(encounter_type))
+
+        self.hp = encounter_parameters[2]
+
 
 ###############
 ##### GUI #####
