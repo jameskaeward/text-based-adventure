@@ -74,6 +74,7 @@ class Game():
         print(loc("LOG_Game_Start"))
 
         self.player = None
+        self.encounter = None
 
     def start_game(self):
 
@@ -82,6 +83,12 @@ class Game():
             print(loc("LOG_Player_Spawned"))
         else:
             print(loc("LOG_Player_Already_Spawned"))
+
+        if self.encounter is None:
+            self.encounter = Encounter()
+            print(loc("LOG_Encounter_Spawned"))
+        else:
+            print(loc("LOG_Encounter_Already_Spawned"))
 
     def locate_player(self):
 
@@ -213,29 +220,98 @@ class Player():
 
         self.dungeon_count = self.dungeon_count + 1
 
+        app.game.encounter.spawn_encounter_random()
+
         # The Dungeon
-        if room == "location_dungeon_room_1":
-            self.busy = True
-            app.actionbar.action_config(1, text="ACTION_1")
+        # if room == "location_dungeon_room_1":
+        #     self.busy = True
+        #     app.actionbar.action_config(1, text="ACTION_1")
 
-        if room == "location_dungeon_room_2":
-            self.busy = True
-            app.actionbar.action_config(1, text="ACTION_2")
+        # if room == "location_dungeon_room_2":
+        #     self.busy = True
+        #     app.actionbar.action_config(1, text="ACTION_2")
         
-        if room == "location_dungeon_room_3":
-            self.busy = True
-            app.actionbar.action_config(1, text="ACTION_3")
+        # if room == "location_dungeon_room_3":
+        #     self.busy = True
+        #     app.actionbar.action_config(1, text="ACTION_3")
 
-        if room == "location_dungeon_room_4":
-            self.busy = True
-            app.actionbar.action_config(1, text="ACTION_4")
+        # if room == "location_dungeon_room_4":
+        #     self.busy = True
+        #     app.actionbar.action_config(1, text="ACTION_4")
 
 class Encounter():
-    def __init__(self, encounter_type):
-        
+    def __init__(self):
+
+        self.active = None
+        self.hp = None
+        self.hp_max = None
+        self.mp = None
+        self.mp_max = None
+        self.reward = None
+        self.available_actions = []
+
+    def spawn_encounter_random(self):
+        encounter = random.choice(list(world.encounters.keys()))
+        print("Spawning:", encounter)
+        self.encounter_setup(encounter)
+
+    def encounter_setup(self, encounter_type):
+
+        # Reset encounter
+        self.active = True
+        self.available_actions = []
+
+        # Retrieve data from gameworld file
+
         encounter_parameters = list(world.encounters.get(encounter_type))
 
-        self.hp = encounter_parameters[2]
+        # Determines what actions the encounter can take
+        available_action_id = list(encounter_parameters[0])
+        for x in available_action_id:
+            self.available_actions.append(world.encounter_actions[x])
+
+        print(self.available_actions)
+
+        # Refilling encounter bars
+        self.hp_max = encounter_parameters[2]
+        self.hp = self.hp_max
+        print("Encounter HP:", self.hp)
+        self.mp_max = encounter_parameters[3]
+        self.mp = self.mp_max
+        print("Encounter MP:", self.mp)
+
+        # Setting encounter stats
+        self.attack = encounter_parameters[1]
+        self.reward = encounter_parameters[4]
+
+        # Sets actions in player UI
+        self.encounter_type_check(encounter_type)
+
+    def encounter_type_check(self, encounter_type):
+        
+        match encounter_type:
+            case "encounter_chest":
+                print("Chest encounter")
+
+            case "encounter_skeleton":
+                print("Skeleton encounter")
+
+            case "encounter_zombie":
+                print("Zombie encounter")
+
+            case "encounter_ghost":
+                print("Ghost encounter")
+
+            case "encounter_slime":
+                print("Slime encounter")
+
+            case "encounter_goblin":
+                print("Goblin encounter")
+
+
+    # Unlocks the map
+    def encounter_defeat(self):
+        self.active = False
 
 
 ###############

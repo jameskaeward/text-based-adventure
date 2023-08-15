@@ -1,5 +1,6 @@
 # Testing code here
 import random
+import os
 
 # option_1 = 100
 # option_2 = 50
@@ -58,3 +59,9 @@ list = (1, 2, 5, 6, 9)
 
 for x in list:
     print(x)
+
+while True:
+    while True:
+        print("1")
+        os.system('cls')
+        break
