@@ -248,6 +248,7 @@ class Encounter():
         self.mp = None
         self.mp_max = None
         self.reward = None
+        self.attack = None
         self.available_actions = []
 
     def spawn_encounter_random(self):
