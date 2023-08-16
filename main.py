@@ -73,13 +73,10 @@ class Game():
     def __init__(self):
         print(loc("LOG_Game_Start"))
 
+    def start_game(self):
+
         global _player
         global _encounter
-
-        _player = None
-        _encounter = None
-
-    def start_game(self):
 
         if _player is None:
             _player = Player()
@@ -223,7 +220,7 @@ class Player():
 
         self.dungeon_count = self.dungeon_count + 1
 
-        app.game.encounter.spawn_encounter_random()
+        _encounter.spawn_encounter_random()
 
         # The Dungeon
         # if room == "location_dungeon_room_1":
@@ -493,6 +490,12 @@ class App(customtkinter.CTk):
 
         _font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
         _font_bold = customtkinter.CTkFont(size=round(_font_size*1.3), weight="bold")
+
+        global _player
+        global _encounter
+
+        _player = None
+        _encounter = None
 
         self.game = Game()
 
