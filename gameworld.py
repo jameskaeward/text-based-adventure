@@ -22,25 +22,25 @@ town = [
 
 ]
 
-dungeon = [
-                                # TODO: Add comments here for room description
-    "location_dungeon_room_1",  # 
-    "location_dungeon_room_2",  # 
-    "location_dungeon_room_3",  # 
-    "location_dungeon_room_4",  # 
+dungeon = {
+                                                        # TODO: Add comments here for room description
+    "location_dungeon_room_1": "NAME_dungeon_room_1",   # 
+    "location_dungeon_room_2": "NAME_dungeon_room_2",   # 
+    "location_dungeon_room_3": "NAME_dungeon_room_3",   # 
+    "location_dungeon_room_4": "NAME_dungeon_room_4",   # 
 
-]
+}
 
 encounters = {
 
-    # encounter_name: [encounter_actions, attack, hp, mp, reward]
+    # encounter_name:       [encounter_actions  , attack, hp    , mp    , reward]
 
-    "encounter_chest": [(0,), 0, 10, 0, 20],
-    "encounter_skeleton": [(1, 2), 0, 10, 0, 20],
-    "encounter_zombie": [(1,), 0, 10, 0, 20],
-    "encounter_ghost": [(1, 2, 3, 4), 0, 10, 10, 20],
-    "encounter_slime": [(1, 2, 3), 0, 10, 5, 20],
-    "encounter_goblin": [(1, 2, 5), 0, 10, 3, 20],
+    "encounter_chest"   :   [(1,)               , 3     , 5     , 0     , 15    ],
+    # "encounter_skeleton":   [(1, 2)             , 1     , 4     , 0     , 4     ],
+    # "encounter_zombie"  :   [(1,)               , 1     , 7     , 0     , 3     ],
+    # "encounter_ghost"   :   [(1, 2, 3, 4)       , 2     , 3     , 10    , 5     ],
+    # "encounter_slime"   :   [(1, 2, 3)          , 1     , 2     , 5     , 2     ],
+    # "encounter_goblin"  :   [(1, 2, 5)          , 1     , 4     , 3     , 8     ],
 
 }
 
