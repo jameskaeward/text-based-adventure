@@ -73,36 +73,39 @@ class Game():
     def __init__(self):
         print(loc("LOG_Game_Start"))
 
-        self.player = None
-        self.encounter = None
+        global _player
+        global _encounter
+
+        _player = None
+        _encounter = None
 
     def start_game(self):
 
-        if self.player is None:
-            self.player = Player()
+        if _player is None:
+            _player = Player()
             print(loc("LOG_Player_Spawned"))
         else:
             print(loc("LOG_Player_Already_Spawned"))
 
-        if self.encounter is None:
-            self.encounter = Encounter()
+        if _encounter is None:
+            _encounter = Encounter()
             print(loc("LOG_Encounter_Spawned"))
         else:
             print(loc("LOG_Encounter_Already_Spawned"))
 
     def locate_player(self):
 
-        if self.player is None:
+        if _player is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            return loc(world.locations.get(self.player.location))
+            return loc(world.locations.get(_player.location))
     
     def move_player(self, location_id):
 
-        if self.player is None:
+        if _player is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            self.player.move(location_id)
+            _player.move(location_id)
 
 class Player():
     def __init__(self):
@@ -333,7 +336,7 @@ class Map(customtkinter.CTkToplevel):
         ## Navigation Buttons
 
         # Player should not see this, checks if player is present
-        if app.game.player is None: 
+        if _player is None: 
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
             
@@ -344,11 +347,11 @@ class Map(customtkinter.CTkToplevel):
             return
         
         # Player must finish interactions before moving to another location
-        if app.game.player.busy is True or app.game.player.in_combat is True:
+        if _player.busy is True or _player.in_combat is True:
             self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             self.label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            if app.game.player.in_combat is True:
+            if _player.in_combat is True:
                 self.warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
                 self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
             else:
@@ -358,7 +361,7 @@ class Map(customtkinter.CTkToplevel):
             # print("Player is busy!")
             return
 
-        if app.game.player.location in world.town: # If player is in town
+        if _player.location in world.town: # If player is in town
 
             # print("Player is in town")
 
@@ -413,10 +416,10 @@ class Map(customtkinter.CTkToplevel):
 
     def map_move(self, new_location, in_dungeon):
         if in_dungeon == False:
-            app.game.player.town_move(new_location)
+            _player.town_move(new_location)
             move = True
         if in_dungeon == True:
-            app.game.player.dungeon_move(new_location)
+            _player.dungeon_move(new_location)
             move = True
 
         if move is not True:
