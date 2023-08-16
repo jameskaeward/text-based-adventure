@@ -351,28 +351,32 @@ class Map(customtkinter.CTkToplevel):
     # Renders the map, separate function to allow updating the map
     def draw_map(self):
 
+        # Removes old map elements
+        for item in self.winfo_children():
+            item.destroy()
+
         # Player should not see this, checks if player is present
         if _player is None: 
-            self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
-            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
+            label.grid(column=1, columnspan=5, padx=20, pady=20)
             
-            self.warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=_font_default)
-            self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
+            warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=_font_default)
+            warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player doesn't exist!")
             return
         
         # Player must finish interactions before moving to another location
         if _player.busy is True or _player.in_combat is True:
-            self.label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
-            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
+            label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             if _player.in_combat is True:
-                self.warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
-                self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
+                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
+                warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
             else:
-                self.warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction"), font=_font_default)
-                self.warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
+                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction"), font=_font_default)
+                warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player is busy!")
             return
@@ -383,8 +387,8 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
-            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+            label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
+            label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance", in_dungeon=False))
             navbutton1.grid(row=6, column=3, padx=10, pady=10, sticky="NESW")
@@ -407,8 +411,8 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            self.label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
-            self.label.grid(column=1, columnspan=5, padx=20, pady=20)
+            label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
+            label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             # TODO: Random buttons with random commands
 
@@ -561,7 +565,7 @@ class App(customtkinter.CTk):
             # print("No map to destroy")
             pass
         else:
-            self.map.destroy()
+            self.map.draw_map()
 
     def open_settings(self):
         if self.settings is None or not self.settings.winfo_exists():
