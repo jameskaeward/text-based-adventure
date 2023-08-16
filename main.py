@@ -123,6 +123,11 @@ class Player():
         self.busy = True
         encounter = random.choice(list(world.encounters.keys))
 
+    # Use this to avoid using multiple lines
+    def end_encounter(self):
+        self.busy = False
+        self.in_combat = False
+
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
         app.close_map() # No abusing the map
@@ -293,25 +298,37 @@ class Encounter():
         match encounter_type:
             case "encounter_chest":
                 print("Chest encounter")
+                _player.end_encounter() # Player can choose to not open chest
+                app.actionbar.disable_all_options()
 
             case "encounter_skeleton":
                 print("Skeleton encounter")
+                app.actionbar.disable_all_options()
 
             case "encounter_zombie":
                 print("Zombie encounter")
+                app.actionbar.disable_all_options()
 
             case "encounter_ghost":
                 print("Ghost encounter")
+                app.actionbar.disable_all_options()
 
             case "encounter_slime":
                 print("Slime encounter")
+                app.actionbar.disable_all_options()
 
             case "encounter_goblin":
                 print("Goblin encounter")
+                app.actionbar.disable_all_options()
 
+    
 
     # Unlocks the map
     def encounter_defeat(self):
+        
+        _player.gold = _player.gold + self.reward
+        print(f"Encounter defeated for {self.reward} gold, new balance is {_player.gold}")
+
         self.active = False
 
 
@@ -329,8 +346,10 @@ class Map(customtkinter.CTkToplevel):
         self.geometry("700x300")
         self.rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
         self.columnconfigure((1, 2, 3, 4, 5), weight=1)
+        self.draw_map()
 
-        ## Navigation Buttons
+    # Renders the map, separate function to allow updating the map
+    def draw_map(self):
 
         # Player should not see this, checks if player is present
         if _player is None: 
