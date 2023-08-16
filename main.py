@@ -130,9 +130,9 @@ class Player():
 
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
-        app.close_map() # No abusing the map
-        print(loc("LOG_Moving_Player"), location)
         self.location = location
+        app.update_map() # No abusing the map
+        print(loc("LOG_Moving_Player"), location)
         self.town_actions(location)
 
     def town_actions(self, location):
@@ -144,48 +144,45 @@ class Player():
 
         if location == "location_Entrance":
             print("Now in entrance")
-            app.actionbar.disable_all_options()
-            app.actionbar.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
+            _actionbar.disable_all_options()
+            _actionbar.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
 
         if location == "location_Main_Hall":
             print("Now in main hall")
-            app.actionbar.disable_all_options()
-            app.actionbar.action_config(1, text="ACTION_Wander_Around")
+            _actionbar.disable_all_options()
+            _actionbar.action_config(1, text="ACTION_Wander_Around")
 
             # TODO: Add secret when a key is found in dungeon
 
         if location == "location_Shop":
             print("Now in shop")
-            app.actionbar.disable_all_options()
-            app.actionbar.action_config(1, text="ACTION_Buy_Item")
-            app.actionbar.action_config(2, text="ACTION_Sell_Item")
-            app.actionbar.action_config(3, text="ACTION_Upgrade_Skills")
+            _actionbar.disable_all_options()
+            _actionbar.action_config(1, text="ACTION_Buy_Item")
+            _actionbar.action_config(2, text="ACTION_Sell_Item")
+            _actionbar.action_config(3, text="ACTION_Upgrade_Skills")
 
         if location == "location_Central":
             print("Now in central")
-            app.actionbar.disable_all_options()
-            app.actionbar.action_config(1, text="ACTION_View_Achievements")
-            app.actionbar.action_config(2, text="ACTION_Save_Game")
-            app.actionbar.action_config(3, text="ACTION_Load_Game")
+            _actionbar.disable_all_options()
+            _actionbar.action_config(1, text="ACTION_View_Achievements")
+            _actionbar.action_config(2, text="ACTION_Save_Game")
+            _actionbar.action_config(3, text="ACTION_Load_Game")
 
         if location == "location_Tavern":
             print("Now in tavern")
-            app.actionbar.disable_all_options()
-            app.actionbar.action_config(1, text="ACTION_View_Questboard")
+            _actionbar.disable_all_options()
+            _actionbar.action_config(1, text="ACTION_View_Questboard")
 
     def enter_dungeon(self):
-        app.close_map() # No abusing the map
-        self.busy = False
-        self.in_combat = False
-        print(loc("LOG_Entering_Dungeon"))
-        self.location = "location_Dungeon"
+        self.end_encounter()
         self.dungeon_count = 0
         random_room = random.choice(world.dungeon)
+        self.location = "location_Dungeon"
+        print(loc("LOG_Entering_Dungeon"))
         self.dungeon_move(random_room)
         print("Entering: ", random_room)
 
     def exit_dungeon(self):
-        app.close_map() # No abusing the map
         self.busy = False
         self.in_combat = False
         print(loc("LOG_Exiting_Dungeon"))
@@ -196,20 +193,20 @@ class Player():
         self.town_move("location_Entrance")
 
     def dungeon_move(self, room):
-        app.close_map() # No abusing the map
+        app.update_map() # No abusing the map
         
         if room not in world.dungeon:
             print("ERROR: Wrong dungeon room")
             return
         
-        app.actionbar.disable_all_options()
+        _actionbar.disable_all_options()
 
         # Set exit parameters here
         # TODO: Difficulty settings or different dungeons
 
         # NOTE Make sure to change these values when testing is done
-        minimum_dungeon_rooms = 3
-        exit_threshold = 5
+        minimum_dungeon_rooms = -3
+        exit_threshold = -5
 
         # The Exit
         if self.dungeon_count >= minimum_dungeon_rooms: # Must enter a mininum number of rooms before having a chance to exit
@@ -219,8 +216,9 @@ class Player():
 
             if exit_chance > exit_threshold:
                 self.busy = True
-                app.actionbar.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
-                app.actionbar.action_config(2, text="ACTION_Return_Dungeon", command=self.enter_dungeon)
+                app.update_map()
+                _actionbar.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
+                _actionbar.action_config(2, text="ACTION_Return_Dungeon", command=self.enter_dungeon)
                 return # Function stops here to not continue into dungeon
 
         self.dungeon_count = self.dungeon_count + 1
@@ -230,19 +228,19 @@ class Player():
         # The Dungeon
         # if room == "location_dungeon_room_1":
         #     self.busy = True
-        #     app.actionbar.action_config(1, text="ACTION_1")
+        #     _actionbar.action_config(1, text="ACTION_1")
 
         # if room == "location_dungeon_room_2":
         #     self.busy = True
-        #     app.actionbar.action_config(1, text="ACTION_2")
+        #     _actionbar.action_config(1, text="ACTION_2")
         
         # if room == "location_dungeon_room_3":
         #     self.busy = True
-        #     app.actionbar.action_config(1, text="ACTION_3")
+        #     _actionbar.action_config(1, text="ACTION_3")
 
         # if room == "location_dungeon_room_4":
         #     self.busy = True
-        #     app.actionbar.action_config(1, text="ACTION_4")
+        #     _actionbar.action_config(1, text="ACTION_4")
 
 class Encounter():
     def __init__(self):
@@ -299,27 +297,27 @@ class Encounter():
             case "encounter_chest":
                 print("Chest encounter")
                 _player.end_encounter() # Player can choose to not open chest
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
             case "encounter_skeleton":
                 print("Skeleton encounter")
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
             case "encounter_zombie":
                 print("Zombie encounter")
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
             case "encounter_ghost":
                 print("Ghost encounter")
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
             case "encounter_slime":
                 print("Slime encounter")
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
             case "encounter_goblin":
                 print("Goblin encounter")
-                app.actionbar.disable_all_options()
+                _actionbar.disable_all_options()
 
     
 
@@ -534,8 +532,10 @@ class App(customtkinter.CTk):
         self.main_frame = BaseFrame(self)
         self.main_frame.main_frame()
 
-        self.actionbar = ActionBar(self.main_frame)
-        self.actionbar.grid(row=1, column=1, sticky="NESW")
+        global _actionbar
+
+        _actionbar = ActionBar(self.main_frame)
+        _actionbar.grid(row=1, column=1, sticky="NESW")
 
         self.mainwindow = MainWindow(self.main_frame)
         self.mainwindow.grid(row=0, column=1, sticky="NESW")
@@ -560,7 +560,8 @@ class App(customtkinter.CTk):
         else:
             self.map.focus()  # if window exists focus it
 
-    def close_map(self):
+    # NOTE: MUST be called after movement
+    def update_map(self):
         if self.map is None or not self.map.winfo_exists():
             # print("No map to destroy")
             pass
@@ -741,7 +742,7 @@ class ActionBar(customtkinter.CTkFrame):
 
 
 
-# test = ActionBarOptions.dialogue_option(app.actionbar.options, "Hello World")
+# test = ActionBarOptions.dialogue_option(_actionbar.options, "Hello World")
 # print("Hello World")
 
 # https://felipetesc.github.io/CtkDocs/#/multiple_frames
