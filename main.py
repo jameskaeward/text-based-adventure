@@ -189,7 +189,7 @@ class Player():
         print(loc("LOG_Exiting_Dungeon"))
         self.hp = self.hp_max # Could change to recharge at central plaza
         self.mp = self.mp_max # 
-        print("Dungeon Room Count: ", self.dungeon_count)
+        print("Dungeon Room Count:", self.dungeon_count)
         self.dungeon_count = 0 # NOTE: Probably unecessary but sets to 0 anyway
         self.town_move("location_Entrance")
 
@@ -463,7 +463,7 @@ class Settings(customtkinter.CTkToplevel):
         
         self.resizable(width=False, height=False)
         self.title(loc("NAME_Settings"))
-        self.geometry("400x300")
+        self.geometry("400x400")
 
         # language_id = customtkinter.StringVar()
         # No need: Use .configure() to change text

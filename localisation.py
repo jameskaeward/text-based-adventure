@@ -84,6 +84,10 @@ l_english = {
     "ACTION_Exit_Dungeon": "Exit the dungeon",
     "ACTION_Return_Dungeon": "Return to the dungeon",
 
+    # Dungeon
+
+    "ACTION_Open_Chest": "Open Chest",
+
     # Testing Localisation
 
     # "TEST_Hello_World": "Hello World!",
