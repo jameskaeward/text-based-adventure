@@ -10,7 +10,7 @@
 - [ ] ~~Merchant encounter for loop~~
 - [ ] Loop for dialogue interaction (Printing text)
 - [ ] ~~Make a launcher~~
-- [ ] Random Rooms
+- [x] Random Rooms
     - [x] Town
-        - [ ] Interactive buildings
+        - [x] Interactive buildings
     - [ ] Dungeon Room Buttons
