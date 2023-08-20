@@ -89,6 +89,9 @@ class Game():
         else:
             print(loc("LOG_Encounter_Already_Spawned"))
 
+        # Initalise visual bars
+        APP.update_all_bars()
+
     def locate_player(self):
 
         if PLAYER is None:
@@ -126,12 +129,12 @@ class Player():
     def end_encounter(self):
         self.busy = False
         self.in_combat = False
-        app.update_map()
+        APP.update_map()
 
     # NOTE: This function MUST be called when moving to a location in town
     def town_move(self, location):
         self.location = location
-        app.update_map() # No abusing the map
+        APP.update_map() # No abusing the map
         print(loc("LOG_Moving_Player"), location)
         self.town_actions(location)
 
@@ -144,34 +147,34 @@ class Player():
 
         if location == "location_Entrance":
             print("Now in entrance")
-            _actionbar.delete_all_options()
-            _actionbar.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
+            ACTIONBAR.delete_all_options()
+            ACTIONBAR.action_config(1, text="ACTION_Enter_Dungeon", command=self.enter_dungeon)
 
         if location == "location_Main_Hall":
             print("Now in main hall")
-            _actionbar.delete_all_options()
-            _actionbar.action_config(1, text="ACTION_Wander_Around")
+            ACTIONBAR.delete_all_options()
+            ACTIONBAR.action_config(1, text="ACTION_Wander_Around")
 
             # TODO: Add secret when a key is found in dungeon
 
         if location == "location_Shop":
             print("Now in shop")
-            _actionbar.delete_all_options()
-            _actionbar.action_config(1, text="ACTION_Buy_Item")
-            _actionbar.action_config(2, text="ACTION_Sell_Item")
-            _actionbar.action_config(3, text="ACTION_Upgrade_Skills")
+            ACTIONBAR.delete_all_options()
+            ACTIONBAR.action_config(1, text="ACTION_Buy_Item")
+            ACTIONBAR.action_config(2, text="ACTION_Sell_Item")
+            ACTIONBAR.action_config(3, text="ACTION_Upgrade_Skills")
 
         if location == "location_Central":
             print("Now in central")
-            _actionbar.delete_all_options()
-            _actionbar.action_config(1, text="ACTION_View_Achievements")
-            _actionbar.action_config(2, text="ACTION_Save_Game")
-            _actionbar.action_config(3, text="ACTION_Load_Game")
+            ACTIONBAR.delete_all_options()
+            ACTIONBAR.action_config(1, text="ACTION_View_Achievements")
+            ACTIONBAR.action_config(2, text="ACTION_Save_Game")
+            ACTIONBAR.action_config(3, text="ACTION_Load_Game")
 
         if location == "location_Tavern":
             print("Now in tavern")
-            _actionbar.delete_all_options()
-            _actionbar.action_config(1, text="ACTION_View_Questboard")
+            ACTIONBAR.delete_all_options()
+            ACTIONBAR.action_config(1, text="ACTION_View_Questboard")
 
     def enter_dungeon(self):
         self.end_encounter()
@@ -199,13 +202,13 @@ class Player():
 
     def dungeon_move(self, room):
         print("Entering: ", room)
-        app.update_map() # No abusing the map
+        APP.update_map() # No abusing the map
         
         if room not in world.dungeon:
             print("ERROR: Wrong dungeon room")
             return
         
-        _actionbar.delete_all_options()
+        ACTIONBAR.delete_all_options()
 
         # Set exit parameters here
         # TODO: Difficulty settings or different dungeons
@@ -222,9 +225,9 @@ class Player():
 
             if exit_chance > exit_threshold:
                 self.busy = True
-                app.update_map()
-                _actionbar.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
-                _actionbar.action_config(2, text="ACTION_Return_Dungeon", command=self.enter_dungeon)
+                APP.update_map()
+                ACTIONBAR.action_config(1, text="ACTION_Exit_Dungeon", command=self.exit_dungeon)
+                ACTIONBAR.action_config(2, text="ACTION_Return_Dungeon", command=self.enter_dungeon)
                 return # Function stops here to not continue into dungeon
 
         self.dungeon_count = self.dungeon_count + 1
@@ -234,19 +237,19 @@ class Player():
         # The Dungeon
         # if room == "location_dungeon_room_1":
         #     self.busy = True
-        #     _actionbar.action_config(1, text="ACTION_1")
+        #     ACTIONBAR.action_config(1, text="ACTION_1")
 
         # if room == "location_dungeon_room_2":
         #     self.busy = True
-        #     _actionbar.action_config(1, text="ACTION_2")
+        #     ACTIONBAR.action_config(1, text="ACTION_2")
         
         # if room == "location_dungeon_room_3":
         #     self.busy = True
-        #     _actionbar.action_config(1, text="ACTION_3")
+        #     ACTIONBAR.action_config(1, text="ACTION_3")
 
         # if room == "location_dungeon_room_4":
         #     self.busy = True
-        #     _actionbar.action_config(1, text="ACTION_4")
+        #     ACTIONBAR.action_config(1, text="ACTION_4")
 
 class Encounter():
     def __init__(self):
@@ -258,6 +261,7 @@ class Encounter():
         self.mp_max = None
         self.reward = None
         self.attack = None
+        self.type = None
         self.available_actions = []
 
     def spawn_encounter_random(self):
@@ -270,6 +274,8 @@ class Encounter():
         # Reset encounter
         self.active = True
         self.available_actions = []
+
+        self.type = encounter_type
 
         # Retrieve data from gameworld file
         encounter_parameters = list(world.encounters.get(encounter_type))
@@ -302,30 +308,59 @@ class Encounter():
             case "encounter_chest":
                 print("Chest encounter")
                 PLAYER.end_encounter() # Player can choose to not open chest
-                _actionbar.delete_all_options()
-                _actionbar.action_config(1, text=loc("ACTION_Open_Chest"), command=self.unlock_chest)
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Open_Chest"), command=self.unlock_chest)
 
             case "encounter_skeleton":
                 print("Skeleton encounter")
-                _actionbar.delete_all_options()
+                PLAYER.in_combat = True
+                APP.update_map()
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Fight"), command=self.fight)
+                ACTIONBAR.action_config(2, text=loc("ACTION_Retreat"), command=self.retreat)
 
             case "encounter_zombie":
                 print("Zombie encounter")
-                _actionbar.delete_all_options()
+                PLAYER.in_combat = True
+                APP.update_map()
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Fight"), command=self.fight)
+                ACTIONBAR.action_config(2, text=loc("ACTION_Retreat"), command=self.retreat)
 
             case "encounter_ghost":
                 print("Ghost encounter")
-                _actionbar.delete_all_options()
+                PLAYER.in_combat = True
+                APP.update_map()
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Fight"), command=self.fight)
+                ACTIONBAR.action_config(2, text=loc("ACTION_Retreat"), command=self.retreat)
 
             case "encounter_slime":
                 print("Slime encounter")
-                _actionbar.delete_all_options()
+                PLAYER.in_combat = True
+                APP.update_map()
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Fight"), command=self.fight)
+                ACTIONBAR.action_config(2, text=loc("ACTION_Retreat"), command=self.retreat)
 
             case "encounter_goblin":
                 print("Goblin encounter")
-                _actionbar.delete_all_options()
+                PLAYER.in_combat = True
+                APP.update_map()
+                ACTIONBAR.delete_all_options()
+                ACTIONBAR.action_config(1, text=loc("ACTION_Fight"), command=self.fight)
+                ACTIONBAR.action_config(2, text=loc("ACTION_Retreat"), command=self.retreat)
 
-    # TODO Mimic chest
+    # TODO: Unsucessful Retreat
+    def retreat(self):
+        ACTIONBAR.disable_all_options()
+        PLAYER.end_encounter()
+
+    def fight(self):
+        # ACTIONBAR.delete_all_options()
+        placeholder_function()
+
+    # TODO: Mimic chest
     def unlock_chest(self):
 
         # Randomise chest rarity
@@ -337,10 +372,12 @@ class Encounter():
 
     # Deinitialise the encounter
     def encounter_defeat(self):
-        _actionbar.disable_all_options()
+        ACTIONBAR.disable_all_options()
         
         PLAYER.gold = PLAYER.gold + self.reward
         print(f"Encounter defeated for {self.reward} gold, new balance is {PLAYER.gold}")
+
+        APP.update_all_bars()
 
         self.active = False
 
@@ -400,7 +437,7 @@ class Map(customtkinter.CTkToplevel):
 
             # print("Player is in town")
 
-            player_location = loc("DESC_Current_Location") + app.game.locate_player()
+            player_location = loc("DESC_Current_Location") + APP.game.locate_player()
 
             label = customtkinter.CTkLabel(self, text=player_location, font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
@@ -425,15 +462,18 @@ class Map(customtkinter.CTkToplevel):
 
             # print("Player in dungeon")
 
-            player_location = loc("DESC_Current_Location") + app.game.locate_player()
+            player_location = loc("DESC_Current_Location") + APP.game.locate_player()
 
             label = customtkinter.CTkLabel(self, text=player_location, font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            destination_1 = random.choice(list(world.dungeon.keys()))
-            destination_1_name = world.dungeon[destination_1]
+            dungeon_destinations = list(world.dungeon.keys())
 
-            destination_2 = random.choice(list(world.dungeon.keys()))
+            destination_1 = random.choice(dungeon_destinations)
+            destination_1_name = world.dungeon[destination_1]
+            dungeon_destinations.remove(destination_1) # This removes duplicates, just make sure there at least two dungeon rooms
+
+            destination_2 = random.choice(dungeon_destinations)
             destination_2_name = world.dungeon[destination_2]
 
             navbutton1 = customtkinter.CTkButton(self, text=loc(destination_1_name), command=lambda: self.map_move(destination_1, in_dungeon=True))
@@ -543,10 +583,10 @@ class App(customtkinter.CTk):
         self.main_frame = BaseFrame(self)
         self.main_frame.main_frame()
 
-        global _actionbar
+        global ACTIONBAR
 
-        _actionbar = ActionBar(self.main_frame)
-        _actionbar.grid(row=1, column=1, sticky="NESW")
+        ACTIONBAR = ActionBar(self.main_frame)
+        ACTIONBAR.grid(row=1, column=1, sticky="NESW")
 
         self.mainwindow = MainWindow(self.main_frame)
         self.mainwindow.grid(row=0, column=1, sticky="NESW")
@@ -590,6 +630,11 @@ class App(customtkinter.CTk):
         self.main_frame.pack(expand=True, fill="both")
         self.game.start_game()
 
+    def update_all_bars(self):
+        self.mainwindow.update_bar("health_bar")
+        self.mainwindow.update_bar("mana_bar")
+        self.mainwindow.update_bar("gold_bar")
+
 class BaseFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
@@ -616,11 +661,10 @@ class BaseFrame(customtkinter.CTkFrame):
     #     self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=FONT_BOLD)
     #     self.label.grid(row=0, column=0, padx=10, sticky="N")
 
-    #     self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=app.open_settings)
+    #     self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=APP.open_settings)
     #     self.open_settings.grid(row=1, column=0, pady=10)
-    #     self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=app.open_map)
+    #     self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=APP.open_map)
     #     self.open_map.grid(row=2, column=0, pady=10)
-
 
 class SideBar(customtkinter.CTkFrame):
     def __init__(self, master, app):
@@ -636,7 +680,7 @@ class SideBar(customtkinter.CTkFrame):
         self.open_settings.grid(row=1, column=0, pady=10)
         self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=app.open_map)
         self.open_map.grid(row=2, column=0, pady=10)
-        # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=app.game.start_game)
+        # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=APP.game.start_game)
         # self.test_game.grid(row=3, column=0, pady=10)
 
 class MainWindow(customtkinter.CTkFrame):
@@ -644,25 +688,39 @@ class MainWindow(customtkinter.CTkFrame):
         super().__init__(master, fg_color="transparent")
 
         self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
         
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=FONT_BOLD)
         self.label.grid(row=0, column=1)
 
         self.health_bar_label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Health"), font=FONT_DEFAULT)
+        self.health_bar_label.grid(row=1, column=0, padx=10, pady=2)
         self.health_bar = customtkinter.CTkProgressBar(master=self)
-        self.health_bar.grid(row=1, column=1)
+        self.health_bar.grid(row=1, column=1, sticky="W", padx=10, pady=2)
 
+        self.mana_bar_label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Mana"), font=FONT_DEFAULT)
+        self.mana_bar_label.grid(row=2, column=0, padx=10, pady=2)
         self.mana_bar = customtkinter.CTkProgressBar(master=self)
-        self.mana_bar.grid(row=2, column=1)
+        self.mana_bar.grid(row=2, column=1, sticky="W", padx=10, pady=2)
 
-    def bar_slider(self, bar, value):
+        self.gold_bar = customtkinter.CTkLabel(self, width=10, text=loc("PLAECHOLDER"), font=FONT_DEFAULT)
+        self.gold_bar.grid(row=3, column=0, columnspan=2, sticky="W", padx=10, pady=2)
+
+    def update_bar(self, bar):
         
         match bar:
             case "health_bar":
-                pass
+                health_level = PLAYER.hp / PLAYER.hp_max
+                self.health_bar.set(health_level)
+
             case "mana_bar":
-                pass
+                mana_level = PLAYER.mp / PLAYER.mp_max
+                self.mana_bar.set(mana_level)
+
+            case "gold_bar":
+                gold = PLAYER.gold
+                gold_level = loc("NAME_Gold") + " : " + str(gold)
+                self.gold_bar.configure(text=str(gold_level))
 
 
 # Example bar code
@@ -806,7 +864,7 @@ class ActionBar(customtkinter.CTkFrame):
 
 
 
-# test = ActionBarOptions.dialogue_option(_actionbar.options, "Hello World")
+# test = ActionBarOptions.dialogue_option(ACTIONBAR.options, "Hello World")
 # print("Hello World")
 
 # https://felipetesc.github.io/CtkDocs/#/multiple_frames
@@ -814,6 +872,6 @@ class ActionBar(customtkinter.CTkFrame):
 
 ## This runs the application ##
 if __name__ == "__main__":
-    global app
-    app = App()
-    app.mainloop()
+    global APP
+    APP = App()
+    APP.mainloop()

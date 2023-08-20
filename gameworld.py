@@ -36,11 +36,11 @@ encounters = {
     # encounter_name:       [encounter_actions  , attack, hp    , mp    , reward]
 
     "encounter_chest"   :   [(1,)               , 3     , 5     , 0     , 15    ],
-    # "encounter_skeleton":   [(1, 2)             , 1     , 4     , 0     , 4     ],
-    # "encounter_zombie"  :   [(1,)               , 1     , 7     , 0     , 3     ],
-    # "encounter_ghost"   :   [(1, 2, 3, 4)       , 2     , 3     , 10    , 5     ],
-    # "encounter_slime"   :   [(1, 2, 3)          , 1     , 2     , 5     , 2     ],
-    # "encounter_goblin"  :   [(1, 2, 5)          , 1     , 4     , 3     , 8     ],
+    "encounter_skeleton":   [(1, 2)             , 1     , 4     , 0     , 4     ],
+    "encounter_zombie"  :   [(1,)               , 1     , 7     , 0     , 3     ],
+    "encounter_ghost"   :   [(1, 2, 3, 4)       , 2     , 3     , 10    , 5     ],
+    "encounter_slime"   :   [(1, 2, 3)          , 1     , 2     , 5     , 2     ],
+    "encounter_goblin"  :   [(1, 2, 5)          , 1     , 4     , 3     , 8     ],
 
 }
 

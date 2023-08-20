@@ -41,12 +41,16 @@ l_english = {
     "NAME_Menu": "Menu",
     "NAME_Main_Window": "Main Window",
 
+    "NAME_Health": "Health",
+    "NAME_Mana": "Mana",
+    "NAME_Gold": "Gold",
+
     # Map Locations
 
     "DESC_Current_Location": "Current Location: ",
     
     "DESC_Finish_Interaction": "The map cannot be used right now",
-    "DESC_Finish_Interaction_Combat": "You cannot run away, there are monsters nearby!",
+    "DESC_Finish_Interaction_Combat": "The map cannot be used in combat!",
 
     "NAME_Entrance": "Entrance",
     "NAME_Main_Hall": "Town Hall",
@@ -55,6 +59,11 @@ l_english = {
     "NAME_Tavern": "The Hypnotic Meerkat",
 
     "NAME_Dungeon": "The Dungeon",
+
+    "NAME_dungeon_room_1": "Dark Cavern",
+    "NAME_dungeon_room_2": "Hidden Swamp",
+    "NAME_dungeon_room_3": "Flooded Grotto",
+    "NAME_dungeon_room_4": "Silent Tomb",
 
     # Settings
 
@@ -87,10 +96,11 @@ l_english = {
     # Dungeon
 
     "ACTION_Open_Chest": "Open Chest",
+    "ACTION_Fight": "Fight",
+    "ACTION_Retreat": "Retreat",
 
     # Testing Localisation
 
-    # "TEST_Hello_World": "Hello World!",
     "TEST_Hello_World": "Feature not yet implemented",
     "NAME_Test": "Test",
 
@@ -101,6 +111,8 @@ l_english = {
     "LOG_Entering_Dungeon": "Entering Dungeon",
     "LOG_Exiting_Dungeon": "Exiting Dungeon",
     "LOG_Moving_Player": "Moving player to",
+
+    "PLACEHOLDER": "Placeholder Text",
 
 }
 
