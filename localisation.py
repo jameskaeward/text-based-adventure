@@ -65,6 +65,25 @@ l_english = {
     "NAME_dungeon_room_3": "Flooded Grotto",
     "NAME_dungeon_room_4": "Silent Tomb",
 
+    # Chest Rarities
+
+    "NAME_Wood_Chest": "Castaway's Chest",
+    "NAME_Stone_Chest": "Seafarer's Chest",
+    "NAME_Gold_Chest": "Marauders Chest",
+    "NAME_Diamond_Chest": "Captain's Chest",
+    "NAME_Legend_Chest": "Chest of Legends",
+
+    # Game Messages
+
+    "MESSAGE_Found_Chest": "You spot a sparkling chest in the distance!",
+    "MESSAGE_Found_Skeleton": "A skeleton's arrow surprises you!",
+    "MESSAGE_Found_Zombie": "A zombie walks out of the corner!",
+    "MESSAGE_Found_Ghost": "A feel a cold shiver as a ghost approaches!",
+    "MESSAGE_Found_Slime": "You find a ball, which turns out to be a slime!",
+    "MESSAGE_Found_Goblin": "You hear metal clinking, it was a goblin!",
+
+    "MESSAGE_Opened_Chest": "You opened the {} chest for {} gold!",
+
     # Settings
 
     "NAME_English": "English",

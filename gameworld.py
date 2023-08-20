@@ -22,6 +22,16 @@ town = [
 
 ]
 
+chest_rarities = {
+
+    "1": "NAME_Wood_Chest",
+    "2": "NAME_Stone_Chest",
+    "3": "NAME_Gold_Chest",
+    "4": "NAME_Diamond_Chest",
+    "5": "NAME_Legend_Chest",
+
+}
+
 dungeon = {
                                                         # TODO: Add comments here for room description
     "location_dungeon_room_1": "NAME_dungeon_room_1",   # 

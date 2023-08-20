@@ -307,12 +307,14 @@ class Encounter():
         match encounter_type:
             case "encounter_chest":
                 print("Chest encounter")
+                APP.send_message(loc("MESSAGE_Found_Chest"))
                 PLAYER.end_encounter() # Player can choose to not open chest
                 ACTIONBAR.delete_all_options()
                 ACTIONBAR.action_config(1, text=loc("ACTION_Open_Chest"), command=self.unlock_chest)
 
             case "encounter_skeleton":
                 print("Skeleton encounter")
+                APP.send_message(loc("MESSAGE_Found_Skeleton"))
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -321,6 +323,7 @@ class Encounter():
 
             case "encounter_zombie":
                 print("Zombie encounter")
+                APP.send_message(loc("MESSAGE_Found_Zombie"))
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -329,6 +332,7 @@ class Encounter():
 
             case "encounter_ghost":
                 print("Ghost encounter")
+                APP.send_message(loc("MESSAGE_Found_Ghost"))
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -337,6 +341,7 @@ class Encounter():
 
             case "encounter_slime":
                 print("Slime encounter")
+                APP.send_message(loc("MESSAGE_Found_Slime"))
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -345,6 +350,7 @@ class Encounter():
 
             case "encounter_goblin":
                 print("Goblin encounter")
+                APP.send_message(loc("MESSAGE_Found_Goblin"))
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -364,9 +370,16 @@ class Encounter():
     def unlock_chest(self):
 
         # Randomise chest rarity
-        rarity = random.randint(1, 5)
-        self.reward = self.reward * rarity
+        chest_rarity = random.randint(1, 5)
+        # randomiser = 1.0 - ( 0.5 - random.random ) * 0.5
+        self.reward = int(self.reward * chest_rarity)
         print("Chest worth:", self.reward)
+
+        # Sends message in the game
+        opening_message = loc("MESSAGE_Opened_Chest")
+        chest_type = loc(world.chest_rarities[str(chest_rarity)])
+        sent_message = opening_message.format(chest_type, self.reward)
+        APP.send_message(sent_message)
 
         self.encounter_defeat()
 
@@ -555,6 +568,8 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.resizable(width=False, height=False)
+
         # Setting font here as it gives an error when set outside
 
         global FONT_DEFAULT
@@ -635,6 +650,9 @@ class App(customtkinter.CTk):
         self.mainwindow.update_bar("mana_bar")
         self.mainwindow.update_bar("gold_bar")
 
+    def send_message(self, message):
+        self.mainwindow.add_message(message)
+
 class BaseFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
@@ -706,6 +724,16 @@ class MainWindow(customtkinter.CTkFrame):
         self.gold_bar = customtkinter.CTkLabel(self, width=10, text=loc("PLAECHOLDER"), font=FONT_DEFAULT)
         self.gold_bar.grid(row=3, column=0, columnspan=2, sticky="W", padx=10, pady=2)
 
+        self.messages = customtkinter.CTkTextbox(self, state="disabled", height=100)
+        self.messages.grid(row=5, column=0, columnspan=2, sticky="EW", padx=10, pady=10)
+
+        # self.add_message("TEST")
+        # Example text box
+        # text_1 = customtkinter.CTkTextbox(master=frame_1, width=200, height=70)
+        # text_1.pack(pady=10, padx=10)
+        # text_1.insert("0.0", "CTkTextbox\n\n\n\n")
+        # text_1.configure(state="disabled")
+
     def update_bar(self, bar):
         
         match bar:
@@ -721,6 +749,13 @@ class MainWindow(customtkinter.CTkFrame):
                 gold = PLAYER.gold
                 gold_level = loc("NAME_Gold") + " : " + str(gold)
                 self.gold_bar.configure(text=str(gold_level))
+
+    # TODO: Delete old text
+    def add_message(self, message):
+        message_newline = message + "\n"
+        self.messages.configure(state="normal")
+        self.messages.insert(0.0, message_newline)
+        self.messages.configure(state="disabled")
 
 
 # Example bar code
