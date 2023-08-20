@@ -1,5 +1,7 @@
-# NOTE Location IDs are in word form
-# Example ID: NAME_Entrance
+################
+### GAMEDATA ###
+################
+
 locations = {
 
     "location_Entrance": "NAME_Entrance",
@@ -33,17 +35,17 @@ chest_rarities = {
 }
 
 dungeon = {
-                                                        # TODO: Add comments here for room description
-    "location_dungeon_room_1": "NAME_dungeon_room_1",   # 
-    "location_dungeon_room_2": "NAME_dungeon_room_2",   # 
-    "location_dungeon_room_3": "NAME_dungeon_room_3",   # 
-    "location_dungeon_room_4": "NAME_dungeon_room_4",   # 
+
+    "location_dungeon_room_1": "NAME_dungeon_room_1",   # Dark Cavern
+    "location_dungeon_room_2": "NAME_dungeon_room_2",   # Hidden Swamp
+    "location_dungeon_room_3": "NAME_dungeon_room_3",   # Flooded Grotto
+    "location_dungeon_room_4": "NAME_dungeon_room_4",   # Silent Tomb
 
 }
 
 encounters = {
 
-    # encounter_name:       [encounter_actions  , attack, hp    , mp    , reward]
+    # encounter_name    :   [encounter_actions  , attack, hp    , mp    , reward]
 
     "encounter_chest"   :   [(1,)               , 3     , 5     , 0     , 15    ],
     "encounter_skeleton":   [(1, 2)             , 1     , 4     , 0     , 4     ],
@@ -54,8 +56,6 @@ encounters = {
 
 }
 
-# TODO: Append and test to encounter instance
-# For x in encounters
 encounter_actions = [
 
     "encounter_action_null",

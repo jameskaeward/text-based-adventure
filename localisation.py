@@ -83,6 +83,7 @@ l_english = {
     "MESSAGE_Found_Goblin": "You hear metal clinking, it was a goblin!",
 
     "MESSAGE_Opened_Chest": "You opened the {} chest for {} gold!",
+    "MESSAGE_Exited_Dungeon": "You manage to escape the dungeon with your life, traversing a total of {} rooms inside.",
 
     # Settings
 

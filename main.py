@@ -108,15 +108,15 @@ class Game():
 
 class Player():
     def __init__(self):
-        self.state = True # Alive
+        self.alive = True # TODO: Incorporate
         self.hp_max = 10
         self.hp = 10
         self.mp_max = 10
         self.mp = 10
         self.gold = 0
-        self.dungeon_count = 0
-        self.busy = False # NOTE: For use with the map so player cannot run away
-        self.in_combat = False
+        self.dungeon_count = 0  # NOTE: This is a debug function, TODO: Add to message log
+        self.busy = False       # When the player is NOT in combat
+        self.in_combat = False  # When the player IS in combat
         # self.tags = [] # TODO: Incorporate all checks into this list
         # self.location = "location_Central"
         self.town_move("location_Central")
@@ -125,7 +125,7 @@ class Player():
     #     self.busy = True
     #     encounter = random.choice(list(world.encounters.keys))
 
-    # Use this to avoid using multiple lines
+    # Use this to improve readability
     def end_encounter(self):
         self.busy = False
         self.in_combat = False
@@ -191,6 +191,9 @@ class Player():
         print(loc("LOG_Exiting_Dungeon"))
         self.hp = self.hp_max # Could change to recharge at central plaza
         self.mp = self.mp_max # 
+        APP.update_all_bars() # Must be called every time a player value changes
+        dungeon_exit_message = loc("MESSAGE_Exited_Dungeon").format(self.dungeon_count)
+        APP.send_message(dungeon_exit_message) # NOTE: Function MUST be localised
         print("Dungeon Room Count:", self.dungeon_count)
         self.dungeon_count = 0 # NOTE: Probably unecessary but sets to 0 anyway
         self.town_move("location_Entrance")
@@ -233,23 +236,6 @@ class Player():
         self.dungeon_count = self.dungeon_count + 1
 
         ENCOUNTER.spawn_encounter_random()
-
-        # The Dungeon
-        # if room == "location_dungeon_room_1":
-        #     self.busy = True
-        #     ACTIONBAR.action_config(1, text="ACTION_1")
-
-        # if room == "location_dungeon_room_2":
-        #     self.busy = True
-        #     ACTIONBAR.action_config(1, text="ACTION_2")
-        
-        # if room == "location_dungeon_room_3":
-        #     self.busy = True
-        #     ACTIONBAR.action_config(1, text="ACTION_3")
-
-        # if room == "location_dungeon_room_4":
-        #     self.busy = True
-        #     ACTIONBAR.action_config(1, text="ACTION_4")
 
 class Encounter():
     def __init__(self):
@@ -307,14 +293,14 @@ class Encounter():
         match encounter_type:
             case "encounter_chest":
                 print("Chest encounter")
-                APP.send_message(loc("MESSAGE_Found_Chest"))
+                APP.send_message(loc("MESSAGE_Found_Chest")) # NOTE: Function MUST be localised
                 PLAYER.end_encounter() # Player can choose to not open chest
                 ACTIONBAR.delete_all_options()
                 ACTIONBAR.action_config(1, text=loc("ACTION_Open_Chest"), command=self.unlock_chest)
 
             case "encounter_skeleton":
                 print("Skeleton encounter")
-                APP.send_message(loc("MESSAGE_Found_Skeleton"))
+                APP.send_message(loc("MESSAGE_Found_Skeleton")) # NOTE: Function MUST be localised
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -323,7 +309,7 @@ class Encounter():
 
             case "encounter_zombie":
                 print("Zombie encounter")
-                APP.send_message(loc("MESSAGE_Found_Zombie"))
+                APP.send_message(loc("MESSAGE_Found_Zombie")) # NOTE: Function MUST be localised
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -332,7 +318,7 @@ class Encounter():
 
             case "encounter_ghost":
                 print("Ghost encounter")
-                APP.send_message(loc("MESSAGE_Found_Ghost"))
+                APP.send_message(loc("MESSAGE_Found_Ghost")) # NOTE: Function MUST be localised
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -341,7 +327,7 @@ class Encounter():
 
             case "encounter_slime":
                 print("Slime encounter")
-                APP.send_message(loc("MESSAGE_Found_Slime"))
+                APP.send_message(loc("MESSAGE_Found_Slime")) # NOTE: Function MUST be localised
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -350,7 +336,7 @@ class Encounter():
 
             case "encounter_goblin":
                 print("Goblin encounter")
-                APP.send_message(loc("MESSAGE_Found_Goblin"))
+                APP.send_message(loc("MESSAGE_Found_Goblin")) # NOTE: Function MUST be localised
                 PLAYER.in_combat = True
                 APP.update_map()
                 ACTIONBAR.delete_all_options()
@@ -379,7 +365,7 @@ class Encounter():
         opening_message = loc("MESSAGE_Opened_Chest")
         chest_type = loc(world.chest_rarities[str(chest_rarity)])
         sent_message = opening_message.format(chest_type, self.reward)
-        APP.send_message(sent_message)
+        APP.send_message(sent_message) # NOTE: Function MUST be localised
 
         self.encounter_defeat()
 
@@ -484,7 +470,7 @@ class Map(customtkinter.CTkToplevel):
 
             destination_1 = random.choice(dungeon_destinations)
             destination_1_name = world.dungeon[destination_1]
-            dungeon_destinations.remove(destination_1) # This removes duplicates, just make sure there at least two dungeon rooms
+            dungeon_destinations.remove(destination_1) # This removes duplicates, just make sure there at least two dungeon rooms otherwise it will throw an error
 
             destination_2 = random.choice(dungeon_destinations)
             destination_2_name = world.dungeon[destination_2]
@@ -496,18 +482,15 @@ class Map(customtkinter.CTkToplevel):
             navbutton2.grid(row=2, column=4, padx=10, pady=10, sticky="NESW")
 
     def map_move(self, new_location, in_dungeon):
-        if in_dungeon == False:
+        if in_dungeon is False:
             PLAYER.town_move(new_location)
             move = True
-        if in_dungeon == True:
+        if in_dungeon is True:
             PLAYER.dungeon_move(new_location)
             move = True
 
         if move is not True:
             print("ERROR: map_move called incorrecty")
-            return
-        
-        # self.destroy()
 
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, master):
@@ -517,9 +500,7 @@ class Settings(customtkinter.CTkToplevel):
         self.title(loc("NAME_Settings"))
         self.geometry("400x400")
 
-        # language_id = customtkinter.StringVar()
-        # No need: Use .configure() to change text
-
+        # This doesn't use the localisation function as it breaks the combobox
         languages = list(localisation.l_index.keys())
 
         font_sizes = ["15", "20", "25", "30"]
@@ -550,6 +531,7 @@ class Settings(customtkinter.CTkToplevel):
         config.change_setting(font_size=new_font_size)
         self.setting_changed()
 
+    # Prompts player to restart to apply settings
     def setting_changed(self):
         if self.restart == None:
             self.restart = customtkinter.CTkLabel(self, text=loc("DESC_Apply_To_Restart"))
@@ -560,10 +542,6 @@ class Settings(customtkinter.CTkToplevel):
 #################
 
 class App(customtkinter.CTk):
-
-    # frames = {}
-    # current = None
-    # bg = ""
 
     def __init__(self):
         super().__init__()
@@ -611,14 +589,6 @@ class App(customtkinter.CTk):
 
         self.map = None
         self.settings = None
-
-        # Initial Button Configuration
-        # TODO: Move check for location, then change
-
-        # self.actionbar.action_config(1)
-        # self.actionbar.action_config(2)
-        # self.actionbar.action_config(3)
-        # self.actionbar.action_config(4)
 
     def open_map(self):
         if self.map is None or not self.map.winfo_exists():
@@ -670,7 +640,7 @@ class BaseFrame(customtkinter.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-
+    # TODO: Add make the sidebar a method
     # def side_bar(self):
 
     #     self.grid_rowconfigure((1, 2, 3, 4), weight=0)
@@ -698,7 +668,7 @@ class SideBar(customtkinter.CTkFrame):
         self.open_settings.grid(row=1, column=0, pady=10)
         self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=app.open_map)
         self.open_map.grid(row=2, column=0, pady=10)
-        # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=APP.game.start_game)
+        # self.test_game = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Test_Game"), command=app.game.start_game)
         # self.test_game.grid(row=3, column=0, pady=10)
 
 class MainWindow(customtkinter.CTkFrame):
@@ -724,18 +694,11 @@ class MainWindow(customtkinter.CTkFrame):
         self.gold_bar = customtkinter.CTkLabel(self, width=10, text=loc("PLAECHOLDER"), font=FONT_DEFAULT)
         self.gold_bar.grid(row=3, column=0, columnspan=2, sticky="W", padx=10, pady=2)
 
+        # NOTE: Textbox must use .insert method to add text
         self.messages = customtkinter.CTkTextbox(self, state="disabled", height=100)
         self.messages.grid(row=5, column=0, columnspan=2, sticky="EW", padx=10, pady=10)
 
-        # self.add_message("TEST")
-        # Example text box
-        # text_1 = customtkinter.CTkTextbox(master=frame_1, width=200, height=70)
-        # text_1.pack(pady=10, padx=10)
-        # text_1.insert("0.0", "CTkTextbox\n\n\n\n")
-        # text_1.configure(state="disabled")
-
     def update_bar(self, bar):
-        
         match bar:
             case "health_bar":
                 health_level = PLAYER.hp / PLAYER.hp_max
@@ -750,25 +713,12 @@ class MainWindow(customtkinter.CTkFrame):
                 gold_level = loc("NAME_Gold") + " : " + str(gold)
                 self.gold_bar.configure(text=str(gold_level))
 
-    # TODO: Delete old text
+    # TODO: Delete old text with a setting for how many lines
     def add_message(self, message):
         message_newline = message + "\n"
         self.messages.configure(state="normal")
         self.messages.insert(0.0, message_newline)
         self.messages.configure(state="disabled")
-
-
-# Example bar code
-# def slider_callback(value):
-#     progressbar_1.set(value)
-
-# progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
-# progressbar_1.pack(pady=10, padx=10)
-# slider_1 = customtkinter.CTkSlider(master=frame_1, command=slider_callback, from_=0, to=1)
-# slider_1.pack(pady=10, padx=10)
-# slider_1.set(0.5)
-
-
 
 class ActionBar(customtkinter.CTkFrame):
     def __init__(self, master):
