@@ -371,10 +371,10 @@ class Map(customtkinter.CTkToplevel):
 
         # Player should not see this, checks if player is present
         if PLAYER is None: 
-            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
+            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
             
-            warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=_font_default)
+            warning = customtkinter.CTkLabel(self, text=loc("DESC_No_Player_Found"), font=FONT_DEFAULT)
             warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player doesn't exist!")
@@ -382,14 +382,14 @@ class Map(customtkinter.CTkToplevel):
         
         # Player must finish interactions before moving to another location
         if PLAYER.busy is True or PLAYER.in_combat is True:
-            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
+            label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             if PLAYER.in_combat is True:
-                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
+                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=FONT_DEFAULT)
                 warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
             else:
-                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction"), font=_font_default)
+                warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction"), font=FONT_DEFAULT)
                 warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
 
             # print("Player is busy!")
@@ -402,7 +402,7 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
+            label = customtkinter.CTkLabel(self, text=player_location, font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             navbutton1 = customtkinter.CTkButton(self, text=loc("NAME_Entrance"), command=lambda: self.map_move("location_Entrance", in_dungeon=False))
@@ -427,7 +427,7 @@ class Map(customtkinter.CTkToplevel):
 
             player_location = loc("DESC_Current_Location") + app.game.locate_player()
 
-            label = customtkinter.CTkLabel(self, text=player_location, font=_font_bold)
+            label = customtkinter.CTkLabel(self, text=player_location, font=FONT_BOLD)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
 
             destination_1 = random.choice(list(world.dungeon.keys()))
@@ -471,16 +471,16 @@ class Settings(customtkinter.CTkToplevel):
 
         font_sizes = ["15", "20", "25", "30"]
         
-        self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=_font_bold)
+        self.label = customtkinter.CTkLabel(self, text = loc("NAME_Settings"), font=FONT_BOLD)
         self.label.pack(pady=10)
 
-        self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=_font_default)
+        self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=FONT_DEFAULT)
         self.language_select_label.pack(pady=10)
         self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language)
         self.language_select.set(localisation.l_index_reverse.get(LANGUAGE))
         self.language_select.pack(pady=10)
 
-        self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=_font_default)
+        self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=FONT_DEFAULT)
         self.font_select_label.pack(pady=10)
         self.font_select = customtkinter.CTkOptionMenu(self, values = font_sizes, command = self.change_font_size)
         self.font_select.set(FONT_SIZE)
@@ -517,11 +517,11 @@ class App(customtkinter.CTk):
 
         # Setting font here as it gives an error when set outside
 
-        global _font_default
-        global _font_bold
+        global FONT_DEFAULT
+        global FONT_BOLD
 
-        _font_default = customtkinter.CTkFont(size=FONT_SIZE, weight="normal")
-        _font_bold = customtkinter.CTkFont(size=round(FONT_SIZE*1.3), weight="bold")
+        FONT_DEFAULT = customtkinter.CTkFont(size=FONT_SIZE, weight="normal")
+        FONT_BOLD = customtkinter.CTkFont(size=round(FONT_SIZE*1.3), weight="bold")
 
         global PLAYER
         global ENCOUNTER
@@ -596,9 +596,9 @@ class BaseFrame(customtkinter.CTkFrame):
     
     def starting_frame(self, master):
 
-        self.title = customtkinter.CTkLabel(self, text=loc("NAME_Text_Based_Adventure"), font=_font_bold)
+        self.title = customtkinter.CTkLabel(self, text=loc("NAME_Text_Based_Adventure"), font=FONT_BOLD)
         self.title.pack(expand=True, pady=10)
-        self.button = customtkinter.CTkButton(self, text=loc("ACTION_Start_Game"), font=_font_bold, command=master.start_game)
+        self.button = customtkinter.CTkButton(self, text=loc("ACTION_Start_Game"), font=FONT_BOLD, command=master.start_game)
         self.button.pack(pady=10)
 
 
@@ -613,7 +613,7 @@ class BaseFrame(customtkinter.CTkFrame):
     #     self.grid_rowconfigure((1, 2, 3, 4), weight=0)
     #     self.grid_rowconfigure(5, weight=10)
 
-    #     self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=_font_bold)
+    #     self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=FONT_BOLD)
     #     self.label.grid(row=0, column=0, padx=10, sticky="N")
 
     #     self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=app.open_settings)
@@ -629,7 +629,7 @@ class SideBar(customtkinter.CTkFrame):
         self.grid_rowconfigure((1, 2, 3, 4), weight=0)
         self.grid_rowconfigure(5, weight=10)
 
-        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=_font_bold)
+        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=FONT_BOLD)
         self.label.grid(row=0, column=0, padx=10, sticky="N")
 
         self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=app.open_settings)
@@ -646,9 +646,10 @@ class MainWindow(customtkinter.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(3, weight=1)
         
-        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=_font_bold)
+        self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=FONT_BOLD)
         self.label.grid(row=0, column=1)
 
+        self.health_bar_label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Health"), font=FONT_DEFAULT)
         self.health_bar = customtkinter.CTkProgressBar(master=self)
         self.health_bar.grid(row=1, column=1)
 
@@ -682,7 +683,7 @@ class ActionBar(customtkinter.CTkFrame):
 
         self.grid_columnconfigure(1, weight=1)
 
-        self.title = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Action_Bar"), font=_font_bold)
+        self.title = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Action_Bar"), font=FONT_BOLD)
         self.title.grid(row=0, column=1, padx=10, pady=10, sticky="NSEW")
         self.options = customtkinter.CTkFrame(master=self, fg_color="transparent")
         self.options.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky="W")
