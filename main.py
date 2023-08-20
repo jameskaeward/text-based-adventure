@@ -24,20 +24,19 @@ def read_config():
     return config_read
 
 if __name__ == "__main__":
-    global _language
-    global _font_size
-    global _settings
-    _settings = read_config()
-    _language = str(_settings["Settings"]["language"])
-    _font_size = int(_settings["Settings"]["font_size"])
+    global LANGUAGE
+    global FONT_SIZE
+    settings = read_config()
+    LANGUAGE = str(settings["Settings"]["language"])
+    FONT_SIZE = int(settings["Settings"]["font_size"])
 
 def placeholder_function():
     print(loc("TEST_Hello_World"))
 
 def loc(loc_id):
-    if _language == "l_english":
+    if LANGUAGE == "l_english":
         text = localisation.l_english.get(loc_id)
-    if _language == "l_french":
+    if LANGUAGE == "l_french":
         text = localisation.l_french.get(loc_id)
     
     if text == None:
@@ -75,34 +74,34 @@ class Game():
 
     def start_game(self):
 
-        global _player
-        global _encounter
+        global PLAYER
+        global ENCOUNTER
 
-        if _player is None:
-            _player = Player()
+        if PLAYER is None:
+            PLAYER = Player()
             print(loc("LOG_Player_Spawned"))
         else:
             print(loc("LOG_Player_Already_Spawned"))
 
-        if _encounter is None:
-            _encounter = Encounter()
+        if ENCOUNTER is None:
+            ENCOUNTER = Encounter()
             print(loc("LOG_Encounter_Spawned"))
         else:
             print(loc("LOG_Encounter_Already_Spawned"))
 
     def locate_player(self):
 
-        if _player is None:
+        if PLAYER is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            return loc(world.locations.get(_player.location))
+            return loc(world.locations.get(PLAYER.location))
     
     def move_player(self, location_id):
 
-        if _player is None:
+        if PLAYER is None:
             print(loc("LOG_Player_Not_Found"))
         else:
-            _player.move(location_id)
+            PLAYER.move(location_id)
 
 class Player():
     def __init__(self):
@@ -230,7 +229,7 @@ class Player():
 
         self.dungeon_count = self.dungeon_count + 1
 
-        _encounter.spawn_encounter_random()
+        ENCOUNTER.spawn_encounter_random()
 
         # The Dungeon
         # if room == "location_dungeon_room_1":
@@ -302,7 +301,7 @@ class Encounter():
         match encounter_type:
             case "encounter_chest":
                 print("Chest encounter")
-                _player.end_encounter() # Player can choose to not open chest
+                PLAYER.end_encounter() # Player can choose to not open chest
                 _actionbar.delete_all_options()
                 _actionbar.action_config(1, text=loc("ACTION_Open_Chest"), command=self.unlock_chest)
 
@@ -340,8 +339,8 @@ class Encounter():
     def encounter_defeat(self):
         _actionbar.disable_all_options()
         
-        _player.gold = _player.gold + self.reward
-        print(f"Encounter defeated for {self.reward} gold, new balance is {_player.gold}")
+        PLAYER.gold = PLAYER.gold + self.reward
+        print(f"Encounter defeated for {self.reward} gold, new balance is {PLAYER.gold}")
 
         self.active = False
 
@@ -371,7 +370,7 @@ class Map(customtkinter.CTkToplevel):
             item.destroy()
 
         # Player should not see this, checks if player is present
-        if _player is None: 
+        if PLAYER is None: 
             label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
             
@@ -382,11 +381,11 @@ class Map(customtkinter.CTkToplevel):
             return
         
         # Player must finish interactions before moving to another location
-        if _player.busy is True or _player.in_combat is True:
+        if PLAYER.busy is True or PLAYER.in_combat is True:
             label = customtkinter.CTkLabel(self, text=loc("NAME_Map"), font=_font_bold)
             label.grid(column=1, columnspan=5, padx=20, pady=20)
 
-            if _player.in_combat is True:
+            if PLAYER.in_combat is True:
                 warning = customtkinter.CTkLabel(self, text=loc("DESC_Finish_Interaction_Combat"), font=_font_default)
                 warning.grid(row=1, rowspan=4, column=1, columnspan=5, padx=20, pady=20)
             else:
@@ -397,7 +396,7 @@ class Map(customtkinter.CTkToplevel):
             return
 
         # Town Map
-        if _player.location in world.town:
+        if PLAYER.location in world.town:
 
             # print("Player is in town")
 
@@ -445,10 +444,10 @@ class Map(customtkinter.CTkToplevel):
 
     def map_move(self, new_location, in_dungeon):
         if in_dungeon == False:
-            _player.town_move(new_location)
+            PLAYER.town_move(new_location)
             move = True
         if in_dungeon == True:
-            _player.dungeon_move(new_location)
+            PLAYER.dungeon_move(new_location)
             move = True
 
         if move is not True:
@@ -478,13 +477,13 @@ class Settings(customtkinter.CTkToplevel):
         self.language_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Languages"), font=_font_default)
         self.language_select_label.pack(pady=10)
         self.language_select = customtkinter.CTkOptionMenu(self, values = languages, command = self.change_language)
-        self.language_select.set(localisation.l_index_reverse.get(_language))
+        self.language_select.set(localisation.l_index_reverse.get(LANGUAGE))
         self.language_select.pack(pady=10)
 
         self.font_select_label = customtkinter.CTkLabel(self, text = loc("NAME_Font_Size"), font=_font_default)
         self.font_select_label.pack(pady=10)
         self.font_select = customtkinter.CTkOptionMenu(self, values = font_sizes, command = self.change_font_size)
-        self.font_select.set(_font_size)
+        self.font_select.set(FONT_SIZE)
         self.font_select.pack(pady=10)
 
         self.restart = None
@@ -521,14 +520,14 @@ class App(customtkinter.CTk):
         global _font_default
         global _font_bold
 
-        _font_default = customtkinter.CTkFont(size=_font_size, weight="normal")
-        _font_bold = customtkinter.CTkFont(size=round(_font_size*1.3), weight="bold")
+        _font_default = customtkinter.CTkFont(size=FONT_SIZE, weight="normal")
+        _font_bold = customtkinter.CTkFont(size=round(FONT_SIZE*1.3), weight="bold")
 
-        global _player
-        global _encounter
+        global PLAYER
+        global ENCOUNTER
 
-        _player = None
-        _encounter = None
+        PLAYER = None
+        ENCOUNTER = None
 
         self.game = Game()
 
@@ -602,10 +601,26 @@ class BaseFrame(customtkinter.CTkFrame):
         self.button = customtkinter.CTkButton(self, text=loc("ACTION_Start_Game"), font=_font_bold, command=master.start_game)
         self.button.pack(pady=10)
 
+
     def main_frame(self):
 
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
+
+    # def side_bar(self):
+
+    #     self.grid_rowconfigure((1, 2, 3, 4), weight=0)
+    #     self.grid_rowconfigure(5, weight=10)
+
+    #     self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Menu"), font=_font_bold)
+    #     self.label.grid(row=0, column=0, padx=10, sticky="N")
+
+    #     self.open_settings = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Settings"), command=app.open_settings)
+    #     self.open_settings.grid(row=1, column=0, pady=10)
+    #     self.open_map = customtkinter.CTkButton(master=self, width=10, text=loc("DESC_Open_Map"), command=app.open_map)
+    #     self.open_map.grid(row=2, column=0, pady=10)
+
 
 class SideBar(customtkinter.CTkFrame):
     def __init__(self, master, app):
@@ -629,9 +644,37 @@ class MainWindow(customtkinter.CTkFrame):
         super().__init__(master, fg_color="transparent")
 
         self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(3, weight=1)
         
         self.label = customtkinter.CTkLabel(self, width=10, text=loc("NAME_Main_Window"), font=_font_bold)
         self.label.grid(row=0, column=1)
+
+        self.health_bar = customtkinter.CTkProgressBar(master=self)
+        self.health_bar.grid(row=1, column=1)
+
+        self.mana_bar = customtkinter.CTkProgressBar(master=self)
+        self.mana_bar.grid(row=2, column=1)
+
+    def bar_slider(self, bar, value):
+        
+        match bar:
+            case "health_bar":
+                pass
+            case "mana_bar":
+                pass
+
+
+# Example bar code
+# def slider_callback(value):
+#     progressbar_1.set(value)
+
+# progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
+# progressbar_1.pack(pady=10, padx=10)
+# slider_1 = customtkinter.CTkSlider(master=frame_1, command=slider_callback, from_=0, to=1)
+# slider_1.pack(pady=10, padx=10)
+# slider_1.set(0.5)
+
+
 
 class ActionBar(customtkinter.CTkFrame):
     def __init__(self, master):
